@@ -29,5 +29,3 @@ Route::get('pasca-bencana', Bencana::class)->name('pascaBencana');
 Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
 Route::get('relawan', \App\Livewire\Admin\Relawan::class)->name('relawan');
 Route::get('data-donasi', \App\Livewire\Admin\Donasi::class)->name('data-donasi');
-Route::get('pakaian', \App\Livewire\Admin\Pakaian::class)->name('pakaian');
-Route::get('makanan', \App\Livewire\Admin\Makanan::class)->name('makanan');
