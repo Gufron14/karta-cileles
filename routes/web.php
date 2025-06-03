@@ -27,5 +27,11 @@ Route::get('daftar-relawan', FormRelawan::class)->name('formRelawan');
 Route::get('pasca-bencana', Bencana::class)->name('pascaBencana');
 
 Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
+Route::get('kelola-bencana', \App\Livewire\Admin\Bencana\DaftarBencana::class)->name('kelola-bencana');
 Route::get('relawan', \App\Livewire\Admin\Relawan::class)->name('relawan');
 Route::get('data-donasi', \App\Livewire\Admin\Donasi::class)->name('data-donasi');
+Route::get('data-pakaian', \App\Livewire\Admin\Pakaian\Index::class)->name('data-pakaian');
+Route::get('penyaluran-pakaian', \App\Livewire\Admin\Pakaian\PenyaluranPakaian::class)->name('penyaluran-pakaian');
+Route::get('data-makanan', \App\Livewire\Admin\Makanan\Index::class)->name('data-makanan');
+Route::get('penyaluran-makanan', \App\Livewire\Admin\Makanan\PenyaluranMakanan::class)->name('penyaluran-makanan');
+

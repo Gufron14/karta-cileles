@@ -98,7 +98,7 @@
                                     @if ($donasi->status == 'terverifikasi')
                                         <span class="badge bg-success">Terverifikasi</span>
                                     @else
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
                                 <td>
@@ -227,9 +227,9 @@
                                 <td>{{ $penyaluran->jml_kpl_keluarga }} KK</td>
                                 <td>
                                     @if ($penyaluran->status == 'terverifikasi')
-                                        <span class="badge bg-success">Terverifikasi</span>
+                                        <span class="badge bg-success">Disalurkan</span>
                                     @else
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
                                 <td>
@@ -470,7 +470,7 @@
                                         <select class="form-select @error('status_penyaluran') is-invalid @enderror"
                                             wire:model="status_penyaluran">
                                             <option value="pending">Pending</option>
-                                            <option value="terverifikasi">Terverifikasi</option>
+                                            <option value="terverifikasi">Disalurkan</option>
                                         </select>
                                         @error('status_penyaluran')
                                             <div class="invalid-feedback">{{ $message }}</div>

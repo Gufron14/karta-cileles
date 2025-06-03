@@ -11,6 +11,8 @@
 
     <title>{{ $title ?? 'Page Title' }}</title>
 
+    @livewireStyles
+
     <!-- Custom fonts for this template-->
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
@@ -97,6 +99,8 @@
             </div>
         </div>
     </div>
+
+    {{-- @livewireScripts --}}
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>

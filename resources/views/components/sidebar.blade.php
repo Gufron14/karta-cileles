@@ -11,65 +11,54 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs('dashboard')" href="{{ route('dashboard') }}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+    </x-nav-link>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <x-nav-link :active="request()->routeIs('kelola-bencana')" href="{{ route('kelola-bencana') }}">
+        <i class="fas fa-heart-broken"></i>
+        <span>Data Bencana</span>
+    </x-nav-link>
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Interface
-    </div>
+    <x-nav-link :active="request()->routeIs('relawan')" href="{{ route('relawan') }}">
+        <i class="fas fa-users"></i>
+        <span>Data Relawan</span>
+    </x-nav-link>
 
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('relawan') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Data Relawan</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs('data-donasi')" href="{{ route('data-donasi') }}">
+        <i class="fas fa-fw fa-money-bill"></i>
+        <span>Data Donasi</span>
+    </x-nav-link>
 
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('data-donasi') }}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Data Donasi</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs('data-pakaian')" href="{{ route('data-pakaian') }}">
+        <i class="fas fa-tshirt"></i>
+        <span>Data Pakaian</span>
+    </x-nav-link>
+    
+    <x-nav-link :active="request()->routeIs('penyaluran-pakaian')" href="{{ route('penyaluran-pakaian') }}">
+        <i class="fas fa-hand-holding-heart"></i>
+        <span>Penyaluran Pakaian</span>
+    </x-nav-link>
 
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('pakaian') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Data Pakaian</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs('data-makanan')" href="{{ route('data-makanan') }}">
+        <i class="fas fa-pizza-slice"></i>
+        <span>Data Makanan</span>
+    </x-nav-link>
 
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('makanan') }}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Data Makanan</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs('penyaluran-makanan')" href="{{ route('penyaluran-makanan') }}">
+        <i class="fas fa-utensils"></i>
+        <span>Penyaluran Makanan</span>
+    </x-nav-link>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Addons
-    </div>
-
-        <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Kelola Berita</span></a>
-    </li>
+    <x-nav-link :active="request()->routeIs()" href="">
+        <i class="fas fa-newspaper"></i>
+        <span>Kelola Berita</span>
+    </x-nav-link>
+    
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item active">
+    {{-- <li class="nav-item active">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
             aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
@@ -87,7 +76,7 @@
                 <a class="collapse-item active" href="blank.html">Blank Page</a>
             </div>
         </div>
-    </li>
+    </li> --}}
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

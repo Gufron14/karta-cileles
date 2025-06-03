@@ -17,7 +17,7 @@ public function up(): void
         $table->string('lokasi');
         $table->date('tanggal_kejadian');
         $table->enum('status', ['aktif', 'selesai'])->default('aktif');
-        $table->text('deskripsi');
+        $table->text('deskripsi')->nullable();
         $table->timestamps();
     });
 }
