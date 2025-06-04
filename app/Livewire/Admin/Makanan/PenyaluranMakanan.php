@@ -31,6 +31,9 @@ class PenyaluranMakanan extends Component
     public $editId = null;
     public $detailData = null;
 
+        protected $paginationTheme = 'bootstrap';
+
+
     protected $rules = [
         'jumlah' => 'required|integer|min:1',
         'alamat' => 'required|string|max:255',

@@ -4,9 +4,9 @@ namespace App\Livewire\Admin\Pakaian;
 
 use App\Models\Pakaian;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
-use Livewire\WithPagination;
 
 #[Title('Data Pakaian Karang Taruna Cileles')]
 #[Layout('components.layouts.admin-layout')]
@@ -33,6 +33,9 @@ class Index extends Component
 
     // Property untuk detail
     public $detailData = null;
+
+        protected $paginationTheme = 'bootstrap';
+
 
     protected $rules = [
         'jenis_pakaian' => 'required|string|max:255',

@@ -83,7 +83,7 @@
                                 <td>{{ $pakaians->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($pakaian->tanggal)->format('d/m/Y') }}</td>
                                 <td class="text-start">{{ $pakaian->nama_donatur }}</td>
-                                <td>{{ $pakaian->jenis_pakaian }}</td>
+                                <td class="text-start">{{ $pakaian->jenis_pakaian }}</td>
                                 <td>{{ $pakaian->jumlah_pakaian }}</td>
                                 <td>
                                     @if ($pakaian->status == 'terverifikasi')
@@ -92,7 +92,7 @@
                                         <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @if ($pakaian->status == 'pending')
                                             <button class="btn btn-sm btn-success"

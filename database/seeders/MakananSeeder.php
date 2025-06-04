@@ -4,10 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Pakaian;
+use App\Models\Makanan;
 use Faker\Factory as Faker;
 
-class PakaianSeeder extends Seeder
+class MakananSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,15 +16,16 @@ class PakaianSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         
-        $jenisPakaian = [
-            'Baju Anak', 'Baju Dewasa', 'Celana Anak', 'Celana Dewasa',
-            'Kemeja', 'Kaos', 'Jaket', 'Rok', 'Dress', 'Sweater'
+        $jenisMakanan = [
+            'Beras', 'Minyak Goreng', 'Gula Pasir', 'Teh', 'Kopi',
+            'Mie Instan', 'Sardines', 'Susu Kental Manis', 'Tepung Terigu',
+            'Kecap Manis', 'Sambal Sachet', 'Bumbu Masak', 'Telur'
         ];
         
         for ($i = 1; $i <= 20; $i++) {
-            Pakaian::create([
-                'jenis_pakaian' => $faker->randomElement($jenisPakaian),
-                'jumlah_pakaian' => $faker->numberBetween(5, 100),
+            Makanan::create([
+                'jenis_makanan' => $faker->randomElement($jenisMakanan),
+                'jumlah_makanan' => $faker->numberBetween(10, 200),
                 'nama_donatur' => $faker->name,
                 'tanggal' => $faker->dateTimeBetween('-6 months', 'now'),
                 'status' => $faker->randomElement(['pending', 'terverifikasi']),

@@ -4,10 +4,10 @@ namespace App\Livewire\Admin\Makanan;
 
 use Livewire\Component;
 use Livewire\Attributes\Title;
+use Carbon\Carbon;
+use App\Models\Makanan;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
-use App\Models\Makanan;
-use Carbon\Carbon;
 
 #[Title('Data Makanan Karang Taruna Cileles')]
 #[Layout('components.layouts.admin-layout')]
@@ -31,6 +31,8 @@ class Index extends Component
     // Other properties
     public $editId = null;
     public $detailData = null;
+
+    protected $paginationTheme = 'bootstrap';
 
     protected $rules = [
         'jenis_makanan' => 'required|string|max:255',

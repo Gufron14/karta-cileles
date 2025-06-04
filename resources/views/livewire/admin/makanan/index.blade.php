@@ -83,8 +83,8 @@
                                 <td>{{ $makanans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($makanan->tanggal)->format('d/m/Y') }}</td>
                                 <td class="text-start">{{ $makanan->nama_donatur }}</td>
-                                <td>{{ $makanan->jenis_makanan }}</td>
-                                <td>
+                                <td class="text-start">{{ $makanan->jenis_makanan }}</td>
+                                <td class="text-end">
                                     @if ($makanan->jumlah_makanan)
                                         {{ number_format($makanan->jumlah_makanan) }} porsi
                                     @else
@@ -98,7 +98,7 @@
                                         <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @if ($makanan->status == 'pending')
                                             <button class="btn btn-sm btn-success"

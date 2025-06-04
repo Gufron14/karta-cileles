@@ -75,8 +75,8 @@
                             <th>No</th>
                             <th>Tanggal</th>
                             <th>Nama Donatur</th>
-                            <th>Email</th>
-                            <th>No. HP</th>
+                            {{-- <th>Email</th>
+                            <th>No. HP</th> --}}
                             <th>Nominal</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -88,12 +88,12 @@
                                 <td>{{ $donasis->firstItem() + $index }}</td>
                                 <td>{{ $donasi->created_at ? $donasi->created_at->format('d/m/Y') : '-' }}</td>
                                 <td class="text-start">{{ $donasi->nama_donatur }}</td>
-                                <td>{{ $donasi->email }}</td>
+                                {{-- <td class="text-start">{{ $donasi->email }}</td>
                                 <td>
                                     <a href="https://wa.me/{{ preg_replace('/^0/', '62', $donasi->no_hp) }}"
                                         target="_blank">{{ $donasi->no_hp }}</a>
-                                </td>
-                                <td>{{ $donasi->nominal_formatted }}</td>
+                                </td> --}}
+                                <td class="text-start">{{ $donasi->nominal_formatted }}</td>
                                 <td>
                                     @if ($donasi->status == 'terverifikasi')
                                         <span class="badge bg-success">Terverifikasi</span>
@@ -101,7 +101,7 @@
                                         <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     <div class="btn-group btn-group-sm">
                                         @if ($donasi->status == 'pending')
                                             <button class="btn btn-success btn-sm"
@@ -222,8 +222,8 @@
                             <tr class="text-center">
                                 <td>{{ $penyalurans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
-                                <td>{{ $penyaluran->uang_keluar_formatted }}</td>
-                                <td>{{ Str::limit($penyaluran->alamat, 30) }}</td>
+                                <td class="text-start">{{ $penyaluran->uang_keluar_formatted }}</td>
+                                <td class="text-start">{{ Str::limit($penyaluran->alamat, 30) }}</td>
                                 <td>{{ $penyaluran->jml_kpl_keluarga }} KK</td>
                                 <td>
                                     @if ($penyaluran->status == 'terverifikasi')
@@ -232,7 +232,7 @@
                                         <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     <div class="btn-group btn-group-sm">
                                         @if ($penyaluran->status == 'pending')
                                             <button class="btn btn-success btn-sm"

@@ -18,7 +18,8 @@ public function up(): void
         $table->string('judul');
         $table->text('isi');
         $table->string('slug');
-        $table->string('thumbnail')->nullable();
+        $table->string('thumbnail');
+        $table->boolean('is_published')->default(false);
         $table->timestamps();
     });
 }

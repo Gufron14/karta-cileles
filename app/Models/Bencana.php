@@ -11,7 +11,7 @@ class Bencana extends Model
         'lokasi',
         'tanggal_kejadian',
         'status',
-        'deskripsi'
+        'deskripsi' // nullable
     ];
 
     public function beritas()

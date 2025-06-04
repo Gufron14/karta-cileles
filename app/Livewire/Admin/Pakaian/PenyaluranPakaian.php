@@ -33,6 +33,9 @@ class PenyaluranPakaian extends Component
     // Property untuk detail
     public $detailData = null;
 
+        protected $paginationTheme = 'bootstrap';
+
+
     protected $rules = [
         'p_laki' => 'required|integer|min:0',
         'p_perempuan' => 'required|integer|min:0',

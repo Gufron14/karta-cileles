@@ -25,6 +25,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
+    <!-- TinyMCE CDN -->
+{{-- <script src="https://cdn.tiny.cloud/1/2cf150qkpc31nbqhbbmdnrraska4vxonztcjefftz0atjyqk/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> --}}
+
+    @stack('styles')
 </head>
 
 <body id="page-top">
@@ -94,7 +98,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
                 </div>
             </div>
         </div>
@@ -113,6 +117,11 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
+
+        <!-- TinyMCE CDN -->
+    <script src="https://cdn.tiny.cloud/1/2cf150qkpc31nbqhbbmdnrraska4vxonztcjefftz0atjyqk/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    @stack('scripts')
 
 </body>
 

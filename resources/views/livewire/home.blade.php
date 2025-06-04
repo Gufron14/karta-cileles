@@ -8,11 +8,14 @@
     ">
             <div class="mask" style="background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100%;">
                 <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="text-white">
-                        <h1 class="mb-3">Heading</h1>
-                        <h4 class="mb-3">Subheading</h4>
-                        <a data-mdb-ripple-init class="btn btn-outline-light btn-lg" href="#!" role="button">Call
-                            to action</a>
+                    <div class="col-6 text-white">
+                        <h3>Relawan Karang Taruna Kecamatan Cileles</h3>
+                        <h4 class="lead">
+                            Dimana kumpulan pemuda-pemudi yang peduli terhadap lingkungan sosial di wilayah Kecamatan
+                            Cileles. Mereka adalah generasi muda yang bergerak secara sukarela untuk membantu masyarakat
+                            melalui kegiatan sosial, kepemudaan, pemberdayaan, hingga penanganan masalah sosial di
+                            sekitar.
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -21,27 +24,60 @@
     </header>
 
     <div class="container mt-5 mb-5">
-        <div class="card border-0 shadow-sm text-center">
+        <div class="card border-0 shadow text-center">
             <div class="card-body p-5">
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center mb-5">
                     <div class="col">
-                        <h4 class="fw-bold">Rp100.000</h4>
+                        <h4 class="fw-bold">
+                            Rp{{ number_format(\App\Models\Donasi::where('status', 'terverifikasi')->sum('nominal'), 0, ',', '.') }}
+                        </h4>
                         <span>Dana Terkumpul</span>
                     </div>
                     |
                     <div class="col">
-                        <h4 class="fw-bold">23</h4>
+                        <h4 class="fw-bold">{{ \App\Models\Donasi::where('status', 'terverifikasi')->count() }}</h4>
                         <span>Donatur</span>
                     </div>
                     |
                     <div class="col">
-                        <h4 class="fw-bold">56</h4>
-                        <span>Relawan</span>
+                        <h4 class="fw-bold">{{ \App\Models\Relawan::where('status', 'aktif')->count() }}</h4>
+                        <span>Relawan Aktif</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">{{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
+                        <span>Makanan (Porsi)</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="col">
+                        <h4 class="fw-bold">{{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
+                        <span>Pakaian (Pcs)</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">
+                            Rp{{ number_format(\App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar'), 0, ',', '.') }}
+                        </h4>
+                        <span>Dana Tersalurkan</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">{{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
+                        <span>Makanan Tersalurkan</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">
+                            {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->sum(\DB::raw('p_laki + p_perempuan + p_anak')) }}
+                        </h4>
+                        <span>Pakaian Tersalurkan</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="container-fluid mb-3" style="background-color: #f3f3f3;">
         <div class="container p-5">
@@ -63,7 +99,22 @@
 
     {{-- Portal Berita --}}
     <div class="container mb-5 p-5">
-        <h4 class="fw-bold text-center">Berita Terkini</h4>
+        <h4 class="fw-bold text-center mb-4">Berita Terkini</h4>
+        <div class="row">
+            <div class="col d-flex align-items-center gap-3">
+                <img src="{{ asset('assets/img/undraw_posting_photo.svg') }}" alt=""
+                    class="img-fluid img-thumbnail" width="50%">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nobis architecto suscipit sequi
+                    aperiam, excepturi accusamus dignissimos quo neque debitis.
+                </p>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ route('berita') }}" class="btn btn-danger">
+                Lihat Semua Berita <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
     </div>
 
     {{-- Pasca Bencana --}}
@@ -96,72 +147,28 @@
             </div>
         </div>
         <!-- Gallery -->
+        <div class="text-center mt-3">
+            <a href="{{ route('berita') }}" class="btn btn-danger">
+                Lihat Dokumentasi Bencana <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
     </div>
 
     {{-- Kolaborasi --}}
-    <div class="container p-5">
-        <h4 class="fw-bold text-center">Jenis Kolaborasi/Bantuan</h4>
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
+    <div class="container">
+        <h4 class="fw-bold text-center py-4 mt-4">Kolaborasi</h4>
+        <div class="row">
             <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                    style="background-image: url('unsplash-photo-1.jpg');">
-                    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
-                        <ul class="d-flex list-unstyled mt-auto">
-                            <li class="me-auto"> <img src="https://github.com/twbs.png" alt="Bootstrap" width="32"
-                                    height="32" class="rounded-circle border border-white"> </li>
-                            <li class="d-flex align-items-center me-3"> <svg class="bi me-2" width="1em"
-                                    height="1em" role="img" aria-label="Location">
-                                    <use xlink:href="#geo-fill"></use>
-                                </svg> <small>Earth</small> </li>
-                            <li class="d-flex align-items-center"> <svg class="bi me-2" width="1em" height="1em"
-                                    role="img" aria-label="Duration">
-                                    <use xlink:href="#calendar3"></use>
-                                </svg> <small>3d</small> </li>
-                        </ul>
-                    </div>
-                </div>
+                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
             </div>
             <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                    style="background-image: url('unsplash-photo-2.jpg');">
-                    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Much longer title that wraps to multiple lines
-                        </h3>
-                        <ul class="d-flex list-unstyled mt-auto">
-                            <li class="me-auto"> <img src="https://github.com/twbs.png" alt="Bootstrap" width="32"
-                                    height="32" class="rounded-circle border border-white"> </li>
-                            <li class="d-flex align-items-center me-3"> <svg class="bi me-2" width="1em"
-                                    height="1em" role="img" aria-label="Location">
-                                    <use xlink:href="#geo-fill"></use>
-                                </svg> <small>Pakistan</small> </li>
-                            <li class="d-flex align-items-center"> <svg class="bi me-2" width="1em"
-                                    height="1em" role="img" aria-label="Duration">
-                                    <use xlink:href="#calendar3"></use>
-                                </svg> <small>4d</small> </li>
-                        </ul>
-                    </div>
-                </div>
+                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
             </div>
             <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                    style="background-image: url('unsplash-photo-3.jpg');">
-                    <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Another longer title belongs here</h3>
-                        <ul class="d-flex list-unstyled mt-auto">
-                            <li class="me-auto"> <img src="https://github.com/twbs.png" alt="Bootstrap"
-                                    width="32" height="32" class="rounded-circle border border-white"> </li>
-                            <li class="d-flex align-items-center me-3"> <svg class="bi me-2" width="1em"
-                                    height="1em" role="img" aria-label="Location">
-                                    <use xlink:href="#geo-fill"></use>
-                                </svg> <small>California</small> </li>
-                            <li class="d-flex align-items-center"> <svg class="bi me-2" width="1em"
-                                    height="1em" role="img" aria-label="Duration">
-                                    <use xlink:href="#calendar3"></use>
-                                </svg> <small>5d</small> </li>
-                        </ul>
-                    </div>
-                </div>
+                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
+            </div>
+            <div class="col">
+                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
             </div>
         </div>
     </div>
@@ -182,7 +189,7 @@
             </div>
             <div class="col">
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
+                    <img src="{{ asset('bantuan 1.png') }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <p class="card-text">Mengasah empati, keterampilan komunikasi, kerja sama tim, dan
                             kepemimpinan, serta memperluas wawasan sosial.</p>
@@ -191,7 +198,7 @@
             </div>
             <div class="col">
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
+                    <img src="{{ asset('bantuan 1.png') }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <p class="card-text">Dapat terlibat aktif dalam menyalurkan bantuan, mendampingi korban, dan
                             memulihkan kondisi lingkungan yang terdampak bencana.</p>
@@ -201,8 +208,82 @@
         </div>
 
         {{-- Panduan Umum --}}
-        <div class="container mb-5 p-5">
-            <h4 class="fw-bold text-center">Panduan Umum</h4>
+        <div class="container">
+            <h4 class="fw-bold text-center mb-3">Panduan Umum</h4>
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Tetap Tenang dan Jangan Panik
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Tetap tenang membantu Anda berpikir jernih dan mengambil keputusan yang tepat dalam situasi
+                            darurat
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Lindungi Diri (Saat Bencana Sedang Terjadi)
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Cari tempat aman sesuai jenis bencana, seperti berlindung di bawah meja saat gempa atau
+                            menjauh dari jendela saat badai.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Ikuti Arahan Resmi
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Dengarkan informasi dari sumber resmi seperti BNPB, BMKG, atau pemerintah setempat untuk
+                            tindakan yang benar dan terbaru.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Utamakan Keselamatan Diri dan Keluarga
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Pastikan semua anggota keluarga berada di tempat yang aman sebelum menyelamatkan barang atau
+                            membantu orang lain.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Bawa Tas Siaga Darurat
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Siapkan tas berisi kebutuhan penting seperti obat, makanan, air, senter, dan dokumen penting
+                            untuk dibawa saat evakuasi.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
+</div>

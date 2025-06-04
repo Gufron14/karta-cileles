@@ -38,6 +38,9 @@ class Relawan extends Component
     public $dokumentasi;
     public $status;
 
+    // Pagination Bootsrap
+    protected $paginationTheme = 'bootstrap';
+
     protected $rules = [
         'nama_lengkap' => 'required|min:3',
         'email' => 'required|email',

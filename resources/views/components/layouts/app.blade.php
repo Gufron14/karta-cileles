@@ -28,7 +28,9 @@
 <body>
     @include('components.navbar')
 
-    {{ $slot }}
+    <div class="min-vh-100">
+        {{ $slot }}
+    </div>
 
     @include('components.footer')
 

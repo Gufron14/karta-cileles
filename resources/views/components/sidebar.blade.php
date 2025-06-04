@@ -31,7 +31,20 @@
         <span>Data Donasi</span>
     </x-nav-link>
 
-    <x-nav-link :active="request()->routeIs('data-pakaian')" href="{{ route('data-pakaian') }}">
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-tshirt"></i>
+            <span>Pakaian</span>
+        </a>
+        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('data-pakaian') }}">Data Pakaian</a>
+                <a class="collapse-item" href="{{ route('penyaluran-pakaian') }}">Pakaian Disalurkan</a>
+            </div>
+        </div>
+    </li>
+    {{-- <x-nav-link :active="request()->routeIs('data-pakaian')" href="{{ route('data-pakaian') }}">
         <i class="fas fa-tshirt"></i>
         <span>Data Pakaian</span>
     </x-nav-link>
@@ -39,9 +52,9 @@
     <x-nav-link :active="request()->routeIs('penyaluran-pakaian')" href="{{ route('penyaluran-pakaian') }}">
         <i class="fas fa-hand-holding-heart"></i>
         <span>Penyaluran Pakaian</span>
-    </x-nav-link>
+    </x-nav-link> --}}
 
-    <x-nav-link :active="request()->routeIs('data-makanan')" href="{{ route('data-makanan') }}">
+    {{-- <x-nav-link :active="request()->routeIs('data-makanan')" href="{{ route('data-makanan') }}">
         <i class="fas fa-pizza-slice"></i>
         <span>Data Makanan</span>
     </x-nav-link>
@@ -49,34 +62,26 @@
     <x-nav-link :active="request()->routeIs('penyaluran-makanan')" href="{{ route('penyaluran-makanan') }}">
         <i class="fas fa-utensils"></i>
         <span>Penyaluran Makanan</span>
-    </x-nav-link>
+    </x-nav-link> --}}
 
-    <x-nav-link :active="request()->routeIs()" href="">
-        <i class="fas fa-newspaper"></i>
-        <span>Kelola Berita</span>
-    </x-nav-link>
-    
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    {{-- <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
             aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
+            <i class="fas fa-utensils"></i>
+            <span>Makanan</span>
         </a>
         <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item active" href="blank.html">Blank Page</a>
+                <a class="collapse-item" href="{{ route('data-makanan') }}">Data Makanan</a>
+                <a class="collapse-item" href="{{ route('penyaluran-makanan') }}">Makanan Disalurkan</a>
             </div>
         </div>
-    </li> --}}
+    </li>
+
+    <x-nav-link :active="request()->routeIs('kelola-berita')" href="{{ route('kelola-berita') }}">
+        <i class="fas fa-newspaper"></i>
+        <span>Kelola Berita</span>
+    </x-nav-link>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
