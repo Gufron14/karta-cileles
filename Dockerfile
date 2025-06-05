@@ -1,44 +1,22 @@
-FROM php:8.2-fpm
+FROM php:8.3-apache
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nginx
+    git unzip curl libzip-dev zip libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www
+COPY . /var/www/html
 
-# Copy existing application directory contents
-COPY . /var/www
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN a2enmod rewrite
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/sites-available/default
+WORKDIR /var/www/html
 
-# Create start script
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-EXPOSE 8080
-
-CMD ["/usr/local/bin/start.sh"]
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
+    && cp .env.example .env \
+    && php artisan key:generate
