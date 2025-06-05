@@ -1,3 +1,22 @@
 * {
     font-family: 'PT Sans', sans-serif;
 }
+
+/* Tambahkan ke file CSS utama atau dalam <style> tag */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.stretched-link:hover {
+    color: var(--bs-primary) !important;
+}
+
+.badge.bg-outline-primary {
+    border: 1px solid var(--bs-primary);
+    background-color: transparent !important;
+}

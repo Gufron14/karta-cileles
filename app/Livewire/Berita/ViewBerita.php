@@ -6,7 +6,7 @@ use App\Models\Berita;
 use Livewire\Component;
 use Livewire\Attributes\Title;
 
-
+#[Title('Baca Berita')]
 class ViewBerita extends Component
 {
     public $slug;

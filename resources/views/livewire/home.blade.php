@@ -45,13 +45,15 @@
                     </div>
                     |
                     <div class="col">
-                        <h4 class="fw-bold">{{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
+                        <h4 class="fw-bold">
+                            {{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
                         <span>Makanan (Porsi)</span>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="col">
-                        <h4 class="fw-bold">{{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
+                        <h4 class="fw-bold">
+                            {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
                         <span>Pakaian (Pcs)</span>
                     </div>
                     |
@@ -63,7 +65,8 @@
                     </div>
                     |
                     <div class="col">
-                        <h4 class="fw-bold">{{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
+                        <h4 class="fw-bold">
+                            {{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
                         <span>Makanan Tersalurkan</span>
                     </div>
                     |
@@ -98,24 +101,184 @@
     </div>
 
     {{-- Portal Berita --}}
-    <div class="container mb-5 p-5">
-        <h4 class="fw-bold text-center mb-4">Berita Terkini</h4>
-        <div class="row">
-            <div class="col d-flex align-items-center gap-3">
-                <img src="{{ asset('assets/img/undraw_posting_photo.svg') }}" alt=""
-                    class="img-fluid img-thumbnail" width="50%">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nobis architecto suscipit sequi
-                    aperiam, excepturi accusamus dignissimos quo neque debitis.
-                </p>
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary mb-3">Portal Berita Terkini</h2>
+                <p class="text-muted lead">Informasi terbaru seputar kegiatan dan program Karang Taruna Cileles</p>
+                <div class="mx-auto bg-primary" style="width: 60px; height: 3px;"></div>
             </div>
+
+            @if ($latestBerita || $otherBerita->count() > 0)
+                <div class="row g-4">
+                    {{-- Highlight Berita Utama --}}
+                    @if ($latestBerita)
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-lg h-100 overflow-hidden">
+                                <div class="position-relative">
+                                    @if ($latestBerita->thumbnail)
+                                        <img src="{{ $latestBerita->thumbnail_url ?? asset('storage/' . $latestBerita->thumbnail) }}"
+                                            alt="{{ $latestBerita->judul }}" class="card-img-top"
+                                            style="height: 300px; object-fit: cover;">
+                                    @else
+                                        <img src="{{ asset('assets/img/undraw_posting_photo.svg') }}"
+                                            alt="Default News Image" class="card-img-top bg-light p-4"
+                                            style="height: 300px; object-fit: contain;">
+                                    @endif
+                                    <div class="position-absolute top-0 start-0 m-3">
+                                        <span class="badge bg-danger fs-6 px-3 py-2">
+                                            <i class="fas fa-fire me-1"></i>TERBARU
+                                        </span>
+                                    </div>
+                                    @if ($latestBerita->bencana)
+                                        <div class="position-absolute top-0 end-0 m-3">
+                                            <span class="badge bg-primary fs-6 px-3 py-2">
+                                                {{ $latestBerita->bencana->nama_bencana }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3 text-muted small">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        <span>{{ $latestBerita->created_at->format('d M Y') }}</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span>{{ $latestBerita->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <h4 class="card-title fw-bold mb-3 text-dark">
+                                        {{ $latestBerita->judul }}
+                                    </h4>
+                                    <p class="card-text text-muted mb-4">
+                                        {{ Str::limit(strip_tags($latestBerita->isi), 150) }}
+                                    </p>
+                                    <a href="{{ route('detailBerita', $latestBerita->slug) }}"
+                                        class="btn btn-primary btn-lg px-4">
+                                        Baca Selengkapnya
+                                        <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Berita Lainnya --}}
+                    <div class="col-lg-6">
+                        <div class="row g-3 h-100">
+                            @forelse($otherBerita as $berita)
+                                <div class="col-12">
+                                    <div class="card border-0 shadow-sm h-100">
+                                        <div class="row g-0 h-100">
+                                            <div class="col-4">
+                                                @if ($berita->thumbnail)
+                                                    <img src="{{ $berita->thumbnail_url ?? asset('storage/' . $berita->thumbnail) }}"
+                                                        alt="{{ $berita->judul }}"
+                                                        class="img-fluid rounded-start h-100"
+                                                        style="object-fit: cover;">
+                                                @else
+                                                    <div
+                                                        class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start">
+                                                        <i class="fas fa-newspaper fa-2x text-muted"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="card-body p-3 h-100 d-flex flex-column">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        @if ($berita->bencana)
+                                                            <span
+                                                                class="badge bg-outline-primary text-primary small me-2">
+                                                                {{ $berita->bencana->nama_bencana }}
+                                                            </span>
+                                                        @endif
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-calendar-alt me-1"></i>
+                                                            {{ $berita->created_at->format('d M Y') }}
+                                                        </small>
+                                                    </div>
+                                                    <h6 class="card-title fw-bold mb-2 flex-grow-1">
+                                                        <a href="{{ route('detailBerita', $berita->slug) }}"
+                                                            class="text-decoration-none text-dark stretched-link">
+                                                            {{ Str::limit($berita->judul, 80) }}
+                                                        </a>
+                                                    </h6>
+                                                    <p class="card-text text-muted small mb-0">
+                                                        {{ Str::limit(strip_tags($berita->isi), 80) }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                @if (!$latestBerita)
+                                    <div class="col-12">
+                                        <div class="text-center py-5">
+                                            <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">Belum ada berita tersedia</h5>
+                                            <p class="text-muted">Berita terbaru akan segera hadir</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforelse
+
+                            {{-- Jika hanya ada 1 berita, tampilkan placeholder --}}
+                            @if ($otherBerita->count() == 0 && $latestBerita)
+                                <div class="col-12">
+                                    <div class="card border-0 shadow-sm bg-light">
+                                        <div class="card-body text-center py-4">
+                                            <i class="fas fa-plus-circle fa-2x text-muted mb-3"></i>
+                                            <h6 class="text-muted">Berita lainnya segera hadir</h6>
+                                            <p class="text-muted small mb-0">Pantau terus untuk update terbaru</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Call to Action --}}
+                <div class="d-flex gap-3 justify-content-center flex-wrap mt-5">
+                    <a href="{{ route('berita') }}" class="btn btn-primary btn-lg px-4">
+                        <i class="fas fa-newspaper me-2"></i>
+                        Lihat Semua Berita
+                    </a>
+                    <a href="{{ route('formRelawan') }}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Bergabung Jadi Relawan
+                    </a>
+                </div>
+            @else
+                {{-- Empty State --}}
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="text-center py-5">
+                            <img src="{{ asset('assets/img/undraw_posting_photo.svg') }}" alt="No News"
+                                class="img-fluid mb-4" style="max-width: 200px;">
+                            <h4 class="fw-bold text-primary mb-3">Portal Berita Segera Hadir</h4>
+                            <p class="text-muted mb-4">
+                                Kami sedang menyiapkan berbagai informasi menarik seputar kegiatan Karang Taruna
+                                Cileles.
+                                Pantau terus untuk mendapatkan update terbaru!
+                            </p>
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                <a href="{{ route('relawan') }}" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i>
+                                    Daftar Relawan
+                                </a>
+                                <a href="{{ route('faq') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-question-circle me-2"></i>
+                                    FAQ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
-        <div class="text-center mt-3">
-            <a href="{{ route('berita') }}" class="btn btn-danger">
-                Lihat Semua Berita <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
+    </section>
+
 
     {{-- Pasca Bencana --}}
     <div class="container">

@@ -25,7 +25,7 @@ use App\Http\Controllers\LogoutController;
 Route::get('/', Home::class)->name('/');
 
 Route::get('berita', Index::class)->name('berita');
-Route::get('berita/{slug}', Index::class)->name('viewBerita');
+Route::get('berita/{slug}', \App\Livewire\Berita\ViewBerita::class)->name('detailBerita');
 
 Route::get('donasi', \App\Livewire\Donasi::class)->name('donasi');
 Route::get('daftar-relawan', FormRelawan::class)->name('formRelawan');
@@ -55,8 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::get('tambah-berita', \App\Livewire\Admin\PortalBerita\CreateBerita::class)->name('createBerita');
     Route::get('edit-berita', \App\Livewire\Admin\PortalBerita\UpdateBerita::class)->name('editBerita');
     Route::get('edit-berita/{id}', \App\Livewire\Admin\PortalBerita\UpdateBerita::class)->name('editBerita');
-    Route::get('berita/{slug}', \App\Livewire\Berita\ViewBerita::class)->name('detailBerita');
-    
+
     // Route untuk upload gambar TinyMCE
     Route::post('upload-image', [\App\Http\Controllers\ImageUploadController::class, 'upload'])->name('upload.image');
 });

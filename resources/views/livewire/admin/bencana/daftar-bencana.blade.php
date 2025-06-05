@@ -56,8 +56,8 @@
                         @forelse($bencanas as $index => $bencana)
                             <tr class="text-center">
                                 <td>{{ $bencanas->firstItem() + $index }}</td>
-                                <td>{{ $bencana->nama_bencana }}</td>
-                                <td>{{ $bencana->lokasi }}</td>
+                                <td class="text-start">{{ $bencana->nama_bencana }}</td>
+                                <td class="text-start">{{ $bencana->lokasi }}</td>
                                 <td>{{ \Carbon\Carbon::parse($bencana->tanggal_kejadian)->format('d/m/Y') }}</td>
                                 <td>
                                     @if ($bencana->status === 'aktif')
@@ -66,7 +66,7 @@
                                         <span class="badge bg-warning">Selesai</span>
                                     @endif
                                 </td>
-                                <td>{{ Str::limit($bencana->deskripsi, 50) }}</td>
+                                <td class="text-start">{{ Str::limit($bencana->deskripsi, 50) }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-sm btn-outline-info"

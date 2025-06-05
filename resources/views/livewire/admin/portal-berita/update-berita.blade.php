@@ -50,7 +50,7 @@
                                     wire:model="bencana_id">
                                 <option value="">Pilih Jenis Bencana</option>
                                 @foreach($bencanas as $bencana)
-                                    <option value="{{ $bencana->id }}">{{ $bencana->jenis_bencana }}</option>
+                                    <option value="{{ $bencana->id }}">{{ $bencana->nama_bencana }}</option>
                                 @endforeach
                             </select>
                             @error('bencana_id')
@@ -133,7 +133,6 @@
 
     {{-- TinyMCE Script --}}
     @push('scripts')
-    <script src="https://cdn.tiny.cloud/1/YOUR_API_KEY/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             tinymce.init({

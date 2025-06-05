@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
-        <link rel="shortcut icon" href="{{ asset('Karang Taruna.png') }}">
+    <link rel="shortcut icon" href="{{ asset('Karang Taruna.png') }}">
 
 
     <title>{{ $title ?? 'Page Title' }}</title>

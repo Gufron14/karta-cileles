@@ -2,61 +2,42 @@
 
 namespace App\Livewire;
 
-use App\Models\Donasi;
-use App\Models\Relawan;
-use App\Models\Makanan;
-use App\Models\Pakaian;
-use App\Models\PenyaluranDonasi;
-use App\Models\PenyaluranPakaian;
-use App\Models\PenyaluranMakanan;
+use App\Models\Berita;
 use Livewire\Component;
 use Livewire\Attributes\Title;
+use App\Models\DokumentasiBencana;
 
-#[Title('Karang Taruna Cileles')]
+#[Title('Karang Taruna Kecamatan Cileles')]
 class Home extends Component
 {
+    public $latestBerita;
+    public $otherBerita;
+    public $dokumentasiFoto;
+
+    public function mount()
+    {
+        // Ambil 5 berita terakhir yang dipublikasi
+        $beritas = Berita::with('bencana')
+            ->published()
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Pisahkan berita pertama sebagai highlight
+        $this->latestBerita = $beritas->first();
+        $this->otherBerita = $beritas->skip(1);
+
+        // Ambil dokumentasi foto bencana (6 foto untuk gallery)
+        $this->dokumentasiFoto = DokumentasiBencana::with('bencana')
+            ->where('jenis_media', 'foto')
+            ->whereNotNull('file_path')
+            ->latest()
+            ->take(6)
+            ->get();
+    }
+
     public function render()
     {
-        // Statistik Dana
-        $totalDanaTerkumpul = Donasi::where('status', 'terverifikasi')->sum('nominal');
-        $totalDonatur = Donasi::where('status', 'terverifikasi')->distinct('email')->count();
-        $totalDanaDisalurkan = PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar');
-        $sisaDana = $totalDanaTerkumpul - $totalDanaDisalurkan;
-
-        // Statistik Relawan
-        $totalRelawan = Relawan::count();
-        $relawanAktif = Relawan::where('status', 'aktif')->count();
-
-        // Statistik Makanan
-        $totalMakananTerkumpul = Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan');
-        $totalMakananDisalurkan = PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah');
-        $sisaMakanan = $totalMakananTerkumpul - $totalMakananDisalurkan;
-
-        // Statistik Pakaian
-        $totalPakaianTerkumpul = Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian');
-        $totalPakaianDisalurkan = PenyaluranPakaian::where('status', 'disalurkan')->sum('p_laki') + 
-                                 PenyaluranPakaian::where('status', 'disalurkan')->sum('p_perempuan') + 
-                                 PenyaluranPakaian::where('status', 'disalurkan')->sum('p_anak');
-        $sisaPakaian = $totalPakaianTerkumpul - $totalPakaianDisalurkan;
-
-        // Total Keluarga yang Terbantu
-        $totalKeluargaTerbantu = PenyaluranDonasi::where('status', 'approved')->sum('jml_kpl_keluarga') +
-                                PenyaluranMakanan::where('status', 'approved')->sum('jml_kk');
-
-        return view('livewire.home', [
-            'totalDanaTerkumpul' => $totalDanaTerkumpul,
-            'totalDonatur' => $totalDonatur,
-            'totalDanaDisalurkan' => $totalDanaDisalurkan,
-            'sisaDana' => $sisaDana,
-            'totalRelawan' => $totalRelawan,
-            'relawanAktif' => $relawanAktif,
-            'totalMakananTerkumpul' => $totalMakananTerkumpul,
-            'totalMakananDisalurkan' => $totalMakananDisalurkan,
-            'sisaMakanan' => $sisaMakanan,
-            'totalPakaianTerkumpul' => $totalPakaianTerkumpul,
-            'totalPakaianDisalurkan' => $totalPakaianDisalurkan,
-            'sisaPakaian' => $sisaPakaian,
-            'totalKeluargaTerbantu' => $totalKeluargaTerbantu,
-        ]);
+        return view('livewire.home');
     }
 }
