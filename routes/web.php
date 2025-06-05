@@ -22,6 +22,11 @@ use App\Http\Controllers\LogoutController;
 |
 */
 
+// Route::get('/db-test', function () {
+//     return \DB::select('SELECT NOW()');
+// });
+
+
 Route::get('/', Home::class)->name('/');
 
 Route::get('berita', Index::class)->name('berita');
