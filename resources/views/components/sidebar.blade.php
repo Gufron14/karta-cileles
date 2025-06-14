@@ -21,6 +21,11 @@
         <span>Data Bencana</span>
     </x-nav-link>
 
+    <x-nav-link :active="request()->routeIs('dokumentasi-bencana')" href="{{ route('dokumentasi-bencana') }}">
+        <i class="fas fa-camera"></i>
+        <span>Dokumentasi Bencana</span>
+    </x-nav-link>
+
     <x-nav-link :active="request()->routeIs('relawan')" href="{{ route('relawan') }}">
         <i class="fas fa-users"></i>
         <span>Data Relawan</span>

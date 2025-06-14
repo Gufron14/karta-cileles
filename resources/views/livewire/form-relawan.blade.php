@@ -44,7 +44,7 @@
                         <div class="d-flex gap-3">
                             <div class="col mb-3">
                                 <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                                <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" 
+                                <input type="text" pattern="[^0-9]*" title="Tidak boleh ada angka" class="form-control @error('tempat_lahir') is-invalid @enderror" 
                                        wire:model="tempat_lahir" id="tempat_lahir">
                                 @error('tempat_lahir')
                                     <div class="invalid-feedback">{{ $message }}</div>

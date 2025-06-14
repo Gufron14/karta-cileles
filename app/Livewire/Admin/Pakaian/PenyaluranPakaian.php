@@ -33,15 +33,14 @@ class PenyaluranPakaian extends Component
     // Property untuk detail
     public $detailData = null;
 
-        protected $paginationTheme = 'bootstrap';
-
+    protected $paginationTheme = 'bootstrap';
 
     protected $rules = [
         'p_laki' => 'required|integer|min:0',
         'p_perempuan' => 'required|integer|min:0',
         'p_anak' => 'required|integer|min:0',
         'tanggal' => 'required|date',
-        'status' => 'required|in:pending,disalurkan'
+        'status' => 'required|in:pending,disalurkan',
     ];
 
     protected $messages = [
@@ -52,7 +51,7 @@ class PenyaluranPakaian extends Component
         'p_anak.required' => 'Jumlah pakaian anak harus diisi',
         'p_anak.min' => 'Jumlah pakaian anak minimal 0',
         'tanggal.required' => 'Tanggal harus diisi',
-        'tanggal.date' => 'Format tanggal tidak valid'
+        'tanggal.date' => 'Format tanggal tidak valid',
     ];
 
     public function mount()
@@ -113,7 +112,7 @@ class PenyaluranPakaian extends Component
             'p_perempuan' => $this->p_perempuan,
             'p_anak' => $this->p_anak,
             'tanggal' => $this->tanggal,
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $this->resetForm();
@@ -124,7 +123,7 @@ class PenyaluranPakaian extends Component
     public function edit($id)
     {
         $penyaluran = ModelsPenyaluranPakaian::findOrFail($id);
-        
+
         $this->editingId = $id;
         $this->isEditing = true;
         $this->p_laki = $penyaluran->p_laki;
@@ -152,7 +151,7 @@ class PenyaluranPakaian extends Component
             'p_perempuan' => $this->p_perempuan,
             'p_anak' => $this->p_anak,
             'tanggal' => $this->tanggal,
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $this->resetForm();
@@ -171,7 +170,7 @@ class PenyaluranPakaian extends Component
         $penyaluran = ModelsPenyaluranPakaian::findOrFail($id);
         $newStatus = $penyaluran->status == 'pending' ? 'disalurkan' : 'pending';
         $penyaluran->update(['status' => $newStatus]);
-        
+
         session()->flash('success', 'Status penyaluran berhasil diperbarui!');
     }
 
@@ -181,28 +180,27 @@ class PenyaluranPakaian extends Component
         session()->flash('success', 'Data penyaluran pakaian berhasil dihapus!');
     }
 
-public function render()
-{
-    $query = ModelsPenyaluranPakaian::query();
+    public function render()
+    {
+        $query = ModelsPenyaluranPakaian::query();
 
-    // Filter berdasarkan status
-    if ($this->statusFilter) {
-        $query->where('status', $this->statusFilter);
+        // Filter berdasarkan status
+        if ($this->statusFilter) {
+            $query->where('status', $this->statusFilter);
+        }
+
+        // Filter berdasarkan bulan
+        if ($this->bulanFilter) {
+            $query->whereMonth('tanggal', $this->bulanFilter);
+        }
+
+        // Filter berdasarkan tahun
+        if ($this->tahunFilter) {
+            $query->whereYear('tanggal', $this->tahunFilter);
+        }
+
+        $penyalurans = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('livewire.admin.pakaian.penyaluran-pakaian', compact('penyalurans'));
     }
-
-    // Filter berdasarkan bulan
-    if ($this->bulanFilter) {
-        $query->whereMonth('tanggal', $this->bulanFilter);
-    }
-
-    // Filter berdasarkan tahun
-    if ($this->tahunFilter) {
-        $query->whereYear('tanggal', $this->tahunFilter);
-    }
-
-    $penyalurans = $query->orderBy('created_at', 'desc')->paginate(10);
-
-    return view('livewire.admin.pakaian.penyaluran-pakaian', compact('penyalurans'));
-}
-
 }

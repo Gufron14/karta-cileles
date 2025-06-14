@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Relawan;
+use Livewire\Component;
+use Livewire\Attributes\Title;
+
+#[Title('Formulir Pendaftaran Relawan')]
 
 class FormRelawan extends Component
 {

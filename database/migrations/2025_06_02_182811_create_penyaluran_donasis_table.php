@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('penyaluran_donasis', function (Blueprint $table) {
             $table->id();
+            // $table->foreignId('donasi_id')->constrained('donasis')->onDelete('cascade');
             $table->date('tanggal');
             $table->decimal('uang_keluar', 15, 2);
             $table->string('alamat');

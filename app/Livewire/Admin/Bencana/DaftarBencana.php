@@ -3,13 +3,13 @@
 namespace App\Livewire\Admin\Bencana;
 
 use Livewire\Component;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use App\Models\Bencana;
 use App\Models\DokumentasiBencana;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 
 #[Title('Kelola Bencana')]
 #[Layout('components.layouts.admin-layout')]

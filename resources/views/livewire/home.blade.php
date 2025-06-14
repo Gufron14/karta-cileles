@@ -28,42 +28,52 @@
             <div class="card-body p-5">
                 <div class="d-flex align-items-center mb-5">
                     <div class="col">
-                        <h4 class="fw-bold">
+                        @php
+                            $donasiTerkumpul = App\Models\Donasi::where('status', 'terverifikasi')->sum('nominal');
+                            $donasiTersaluraskan = App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar');
+
+                            $donasiTersedia = $donasiTerkumpul - $donasiTersaluraskan;
+                        @endphp
+                        <h4 class="fw-bold text-primary">
+                            Rp{{ number_format($donasiTersedia, 0, ',', '.') }}
+                        </h4>
+                        <span class="text-primary">Donasi Tersedia</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold text-success">
                             Rp{{ number_format(\App\Models\Donasi::where('status', 'terverifikasi')->sum('nominal'), 0, ',', '.') }}
                         </h4>
-                        <span>Dana Terkumpul</span>
+                        <span class="text-success">Donasi Terkumpul</span>
                     </div>
                     |
                     <div class="col">
-                        <h4 class="fw-bold">{{ \App\Models\Donasi::where('status', 'terverifikasi')->count() }}</h4>
-                        <span>Donatur</span>
+                        <h4 class="fw-bold text-danger">
+                            Rp{{ number_format(\App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar'), 0, ',', '.') }}
+                        </h4>
+                        <span class="text-danger">Donasi Tersalurkan</span>
                     </div>
-                    |
-                    <div class="col">
-                        <h4 class="fw-bold">{{ \App\Models\Relawan::where('status', 'aktif')->count() }}</h4>
-                        <span>Relawan Aktif</span>
-                    </div>
-                    |
-                    <div class="col">
+                    
+                    {{-- <div class="col">
                         <h4 class="fw-bold">
                             {{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
-                        <span>Makanan (Porsi)</span>
-                    </div>
+                        <span>Makanan Terkumpul</span>
+                    </div> --}}
                 </div>
                 <div class="d-flex align-items-center">
-                    <div class="col">
+                    {{-- <div class="col">
                         <h4 class="fw-bold">
                             {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
-                        <span>Pakaian (Pcs)</span>
-                    </div>
-                    |
-                    <div class="col">
+                        <span>Pakaian Terkumpul</span>
+                    </div> --}}
+                    
+                    {{-- <div class="col">
                         <h4 class="fw-bold">
                             Rp{{ number_format(\App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar'), 0, ',', '.') }}
                         </h4>
                         <span>Dana Tersalurkan</span>
-                    </div>
-                    |
+                    </div> --}}
+                    
                     <div class="col">
                         <h4 class="fw-bold">
                             {{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
@@ -75,6 +85,16 @@
                             {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->sum(\DB::raw('p_laki + p_perempuan + p_anak')) }}
                         </h4>
                         <span>Pakaian Tersalurkan</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">{{ \App\Models\Donasi::where('status', 'terverifikasi')->count() }}</h4>
+                        <span>Donatur</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">{{ \App\Models\Relawan::where('status', 'aktif')->count() }}</h4>
+                        <span>Relawan Aktif</span>
                     </div>
                 </div>
             </div>

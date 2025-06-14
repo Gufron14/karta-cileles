@@ -70,10 +70,10 @@
                         <tr class="text-center">
                             <th>No.</th>
                             <th>Tanggal</th>
-                            <th>Nama Donatur</th>
+                            <th class="text-start">Nama Donatur</th>
                             <th>Jenis Makanan</th>
-                            <th>Jumlah</th>
-                            <th>Status</th>
+                            {{-- <th>Jumlah</th> --}}
+                            <th class="text-start">Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -84,14 +84,14 @@
                                 <td>{{ \Carbon\Carbon::parse($makanan->tanggal)->format('d/m/Y') }}</td>
                                 <td class="text-start">{{ $makanan->nama_donatur }}</td>
                                 <td class="text-start">{{ $makanan->jenis_makanan }}</td>
-                                <td class="text-end">
+                                {{-- <td class="text-end">
                                     @if ($makanan->jumlah_makanan)
                                         {{ number_format($makanan->jumlah_makanan) }} porsi
                                     @else
                                         -
                                     @endif
-                                </td>
-                                <td>
+                                </td> --}}
+                                <td class="text-start">
                                     @if ($makanan->status == 'terverifikasi')
                                         <span class="badge bg-success">Terverifikasi</span>
                                     @else
@@ -102,21 +102,21 @@
                                     <div class="btn-group" role="group">
                                         @if ($makanan->status == 'pending')
                                             <button class="btn btn-sm btn-success"
-                                                wire:click="verifikasi({{ $makanan->id }})" title="Verifikasi">
+                                                wire:click="verifikasi({{ $makanan->id }})" title="Verifikasi"
+                                                wire:confirm="Apakah Anda yakin ingin memverifikasi data ini?">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         @endif
-                                        <button class="btn btn-sm btn-warning" wire:click="edit({{ $makanan->id }})"
+                                        {{-- <button class="btn btn-sm btn-warning" wire:click="edit({{ $makanan->id }})"
                                             title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="btn btn-sm btn-info" wire:click="detail({{ $makanan->id }})"
                                             title="Detail">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </button> --}}
                                         <button class="btn btn-sm btn-danger" wire:click="delete({{ $makanan->id }})"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
-                                            title="Hapus">
+                                            wire:confirm="Apakah Anda yakin ingin menghapus data ini?" title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -149,15 +149,14 @@
                     <form wire:submit.prevent="store">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="jenis_makanan" class="form-label">Jenis Makanan</label>
-                                <input type="text"
-                                    class="form-control @error('jenis_makanan') is-invalid @enderror"
-                                    wire:model="jenis_makanan" placeholder="Contoh: Nasi Bungkus, Roti, Mie Instan">
+                                <label for="jenis_makanan" class="form-label">Kategori Makanan</label>
+                                <input type="text" class="form-control @error('jenis_makanan') is-invalid @enderror" wire:model="jenis_makanan"
+                                placeholder="Makanan pokok, makanan ringan, minuman, DLL)">
                                 @error('jenis_makanan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="jumlah_makanan" class="form-label">Jumlah Makanan (Opsional)</label>
                                 <input type="number"
                                     class="form-control @error('jumlah_makanan') is-invalid @enderror"
@@ -167,7 +166,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                                 <div class="form-text">Kosongkan jika jumlah tidak diketahui</div>
-                            </div>
+                            </div> --}}
                             <div class="mb-3">
                                 <label for="nama_donatur" class="form-label">Nama Donatur</label>
                                 <input type="text" class="form-control @error('nama_donatur') is-invalid @enderror"

@@ -65,7 +65,7 @@
                         <tr class="text-center">
                             <th>No.</th>
                             <th>Tanggal</th>
-                            <th>Jumlah Makanan</th>
+                            {{-- <th>Jumlah Makanan</th> --}}
                             <th>Alamat</th>
                             <th>Jumlah KK</th>
                             <th>Status</th>
@@ -77,10 +77,10 @@
                             <tr class="text-center">
                                 <td>{{ $penyalurans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
-                                <td>{{ number_format($penyaluran->jumlah) }} porsi</td>
+                                {{-- <td>{{ number_format($penyaluran->jumlah) }} porsi</td> --}}
                                 <td class="text-start">{{ $penyaluran->alamat }}</td>
                                 <td>{{ number_format($penyaluran->jml_kk) }} KK</td>
-                                <td>
+                                <td class="text-start">
                                     @if ($penyaluran->status == 'disalurkan')
                                         <span class="badge bg-success">Disalurkan</span>
                                     @else
@@ -90,7 +90,8 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-sm btn-warning"
-                                            wire:click="updateStatus({{ $penyaluran->id }})" title="Ubah Status">
+                                            wire:click="updateStatus({{ $penyaluran->id }})" title="Ubah Status"
+                                            wire:confirm="Apakah Anda yakin ingin memverifikasi data ini?">
                                             <i class="fas fa-sync"></i>
                                         </button>
                                         <button class="btn btn-sm btn-primary" wire:click="edit({{ $penyaluran->id }})"

@@ -6,7 +6,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    
+
     {{-- Index Pakaian --}}
     <div class="card mb-4">
         <div class="card-header d-flex align-items-center justify-content-between">
@@ -85,7 +85,7 @@
                                 <td class="text-start">{{ $pakaian->nama_donatur }}</td>
                                 <td class="text-start">{{ $pakaian->jenis_pakaian }}</td>
                                 <td>{{ $pakaian->jumlah_pakaian }}</td>
-                                <td>
+                                <td class="text-start">
                                     @if ($pakaian->status == 'terverifikasi')
                                         <span class="badge bg-success">Terverifikasi</span>
                                     @else
@@ -144,8 +144,17 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="jenis_pakaian" class="form-label">Jenis Pakaian</label>
-                                <input type="text" class="form-control @error('jenis_pakaian') is-invalid @enderror"
-                                    wire:model="jenis_pakaian" placeholder="Contoh: Baju, Celana, Jaket">
+                                {{-- <input type="text"
+                                    class="form-control @error('jenis_pakaian') is-invalid @enderror"
+                                    wire:model="jenis_pakaian" placeholder="Contoh: Baju, Celana, Jaket"> --}}
+                                <select class="form-select @error('jenis_pakaian') is-invalid @enderror"
+                                    wire:model="jenis_pakaian" aria-label="Default select example">
+                                    <option selected muted disabled>-- Pilih Jenis --</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                    <option value="Anak-anak">Anak-anak</option>
+                                    <option value="Perempuan">Laki-laki, Perempuan, dan Anak-anak</option>
+                                </select>
                                 @error('jenis_pakaian')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -209,9 +218,14 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="edit_jenis_pakaian" class="form-label">Jenis Pakaian</label>
-                                <input type="text"
-                                    class="form-control @error('jenis_pakaian') is-invalid @enderror"
-                                    wire:model="jenis_pakaian" placeholder="Contoh: Baju, Celana, Jaket">
+                                <select class="form-select @error('jenis_pakaian') is-invalid @enderror"
+                                    wire:model="jenis_pakaian" aria-label="Default select example">
+                                    <option selected muted disabled>-- Pilih Jenis --</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                    <option value="Anak-anak">Anak-anak</option>
+                                    <option value="Perempuan">Laki-laki, Perempuan, dan Anak-anak</option>
+                                </select>
                                 @error('jenis_pakaian')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

@@ -58,10 +58,10 @@ class DatabaseSeeder extends Seeder
                 'pertanyaan' => 'Bagaimana transparansi penggunaan donasi?',
                 'jawaban' => 'Kami berkomitmen untuk transparansi penuh. Laporan penggunaan donasi dipublikasikan secara berkala di website ini dan dapat diakses oleh semua donatur dan masyarakat.'
             ],
-            [
-                'pertanyaan' => 'Apakah Karang Taruna Cileles bekerja sama dengan pihak lain?',
-                'jawaban' => 'Ya, kami bekerja sama dengan BPBD, PMI, TNI/Polri, organisasi kemanusiaan lainnya, dan pemerintah daerah untuk memberikan bantuan yang optimal kepada masyarakat.'
-            ],
+            // [
+            //     'pertanyaan' => 'Apakah Karang Taruna Cileles bekerja sama dengan pihak lain?',
+            //     'jawaban' => 'Ya, kami bekerja sama dengan BPBD, PMI, TNI/Polri, organisasi kemanusiaan lainnya, dan pemerintah daerah untuk memberikan bantuan yang optimal kepada masyarakat.'
+            // ],
             [
                 'pertanyaan' => 'Bagaimana cara mendapatkan informasi terbaru tentang kegiatan Karang Taruna?',
                 'jawaban' => 'Anda dapat mengikuti informasi terbaru melalui website ini, media sosial kami, atau berlangganan newsletter untuk mendapatkan update kegiatan dan program terbaru.'

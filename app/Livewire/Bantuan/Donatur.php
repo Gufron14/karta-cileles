@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Bantuan;
 
 use App\Models\Donasi as DonasiModel;
 use App\Models\PenyaluranDonasi;
@@ -11,8 +11,8 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 
 #[Title('Data Donasi Karang Taruna Cileles')]
-#[Layout('components.layouts.admin-layout')]
-class Donasi extends Component
+// #[Layout('components.layouts.admin-layout')]
+class Donatur extends Component
 {
     use WithPagination, WithFileUploads;
 
@@ -340,6 +340,6 @@ public function savePenyaluran()
 
         $penyalurans = $penyaluransQuery->orderBy('tanggal', 'desc')->paginate(10, ['*'], 'penyaluran-page');
 
-        return view('livewire.admin.donasi', compact('donasis', 'penyalurans'));
+        return view('livewire.bantuan.donatur', compact('donasis', 'penyalurans'));
     }
 }

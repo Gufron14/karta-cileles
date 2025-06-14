@@ -71,21 +71,21 @@
             <div class="table-responsive">
                 <table class="table table-sm">
                     <thead>
-                        <tr class="text-center">
-                            <th>No</th>
+                        <tr>
+                            <th class="text-center">No</th>
                             <th>Tanggal</th>
                             <th>Nama Donatur</th>
                             {{-- <th>Email</th>
                             <th>No. HP</th> --}}
                             <th>Nominal</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($donasis as $index => $donasi)
-                            <tr class="text-center">
-                                <td>{{ $donasis->firstItem() + $index }}</td>
+                            <tr>
+                                <td class="text-center">{{ $donasis->firstItem() + $index }}</td>
                                 <td>{{ $donasi->created_at ? $donasi->created_at->format('d/m/Y') : '-' }}</td>
                                 <td class="text-start">{{ $donasi->nama_donatur }}</td>
                                 {{-- <td class="text-start">{{ $donasi->email }}</td>
@@ -110,15 +110,15 @@
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         @endif
-                                        <button class="btn btn-primary btn-sm"
+                                        {{-- <button class="btn btn-primary btn-sm"
                                             wire:click="openModalDonasi({{ $donasi->id }})">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm"
+                                        </button> --}}
+                                        {{-- <button class="btn btn-danger btn-sm"
                                             wire:click="deleteDonasi({{ $donasi->id }})"
                                             wire:confirm="Yakin ingin menghapus data ini?">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </button> --}}
                                         <button class="btn btn-info btn-sm"
                                             wire:click="showDetailDonasi({{ $donasi->id }})" title="Lihat Detail">
                                             <i class="fas fa-eye"></i>
@@ -207,8 +207,8 @@
             <div class="table-responsive">
                 <table class="table table-sm">
                     <thead>
-                        <tr class="text-center">
-                            <th>No</th>
+                        <tr>
+                            <th class="text-center">No</th>
                             <th>Tanggal</th>
                             <th>Uang Keluar</th>
                             <th>Alamat Penyaluran</th>
@@ -219,8 +219,8 @@
                     </thead>
                     <tbody>
                         @forelse($penyalurans as $index => $penyaluran)
-                            <tr class="text-center">
-                                <td>{{ $penyalurans->firstItem() + $index }}</td>
+                            <tr>
+                                <td class="text-center">{{ $penyalurans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
                                 <td class="text-start">{{ $penyaluran->uang_keluar_formatted }}</td>
                                 <td class="text-start">{{ Str::limit($penyaluran->alamat, 30) }}</td>
@@ -241,10 +241,10 @@
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         @endif
-                                        <button class="btn btn-primary btn-sm"
+                                        {{-- <button class="btn btn-primary btn-sm"
                                             wire:click="openModalPenyaluran({{ $penyaluran->id }})">
                                             <i class="fas fa-edit"></i>
-                                        </button>
+                                        </button> --}}
                                         <button class="btn btn-danger btn-sm"
                                             wire:click="deletePenyaluran({{ $penyaluran->id }})"
                                             wire:confirm="Yakin ingin menghapus data ini?">
@@ -317,7 +317,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">No. HP <span class="text-danger">*</span></label>
-                                        <input type="text"
+                                        <input type="number"
                                             class="form-control @error('no_hp') is-invalid @enderror"
                                             wire:model="no_hp" placeholder="08xxxxxxxxxx">
                                         @error('no_hp')
@@ -411,6 +411,12 @@
                     </div>
                     <form wire:submit="savePenyaluran">
                         <div class="modal-body">
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            @endif
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">

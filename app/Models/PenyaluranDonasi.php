@@ -10,6 +10,7 @@ class PenyaluranDonasi extends Model
     use HasFactory;
 
     protected $fillable = [
+        // 'donasi_id',
         'tanggal',
         'uang_keluar',
         'alamat',
@@ -17,6 +18,11 @@ class PenyaluranDonasi extends Model
         'keterangan',
         'status'
     ];
+
+//     public function donasi()
+// {
+//     return $this->belongsTo(Donasi::class, 'donasi_id');
+// }
 
     protected $attributes = [
         'status' => 'pending'

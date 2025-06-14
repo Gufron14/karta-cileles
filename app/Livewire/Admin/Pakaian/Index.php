@@ -34,7 +34,7 @@ class Index extends Component
     // Property untuk detail
     public $detailData = null;
 
-        protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'bootstrap';
 
 
     protected $rules = [

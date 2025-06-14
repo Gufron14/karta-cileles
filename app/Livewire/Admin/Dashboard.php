@@ -28,6 +28,8 @@ class Dashboard extends Component
     public $totalRelawan;
     public $totalDonatur;
 
+    public $totalDonasiTersedia = 0;
+
     public function mount()
     {
         $this->loadStatistics();
@@ -44,6 +46,8 @@ class Dashboard extends Component
         $this->totalDonasiDisalurkan = PenyaluranDonasi::where('status', 'terverifikasi')
             ->orWhere('status', 'terverifikasi')
             ->sum('uang_keluar');
+
+        $this->totalDonasiTersedia = $this->totalDonasiTerkumpul - $this->totalDonasiDisalurkan;
 
         // Total pakaian terkumpul
         $this->totalPakaianTerkumpul = Pakaian::where('status', 'terverifikasi')

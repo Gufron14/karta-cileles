@@ -15,6 +15,20 @@
                 <div class="navbar-nav ms-auto">
                     <x-nav-link :active="request()->routeIs('/')" href="{{ route('/') }}">Beranda</x-nav-link>
                     <x-nav-link :active="request()->routeIs('berita')" href="{{ route('berita') }}">Berita</x-nav-link>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Data Bantuan
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('donatur') }}">Data Donatur</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('pakaian') }}">Data Pakaian</a></li>
+                            <li><a class="dropdown-item" href="{{ route('makanan') }}">Data Makanan</a></li>
+                        </ul>
+                    </li>
                     <x-nav-link :active="request()->routeIs('pascaBencana')" href="{{ route('pascaBencana') }}">Pasca Bencana</x-nav-link>
                     <x-nav-link :active="request()->routeIs('donasi')" href="{{ route('donasi') }}">
                         Donasi

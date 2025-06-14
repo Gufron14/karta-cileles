@@ -18,6 +18,11 @@ class Donasi extends Model
         'status'
     ];
 
+//     public function penyalurans()
+// {
+//     return $this->hasMany(PenyaluranDonasi::class, 'donasi_id');
+// }
+
     protected $attributes = [
         'status' => 'pending'
     ];

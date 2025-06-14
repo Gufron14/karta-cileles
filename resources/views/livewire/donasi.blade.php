@@ -37,7 +37,7 @@
                     <form wire:submit="submitDonasi">
                         <div class="mb-3">
                             <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('nama_donatur') is-invalid @enderror" 
+                            <input type="text" pattern="[^0-9]*" title="Tidak boleh ada angka" class="form-control @error('nama_donatur') is-invalid @enderror" 
                                    wire:model.blur="nama_donatur" placeholder="Masukkan nama lengkap">
                             @error('nama_donatur')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -55,7 +55,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Nomor Telepon <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('no_hp') is-invalid @enderror" 
+                            <input type="number" class="form-control @error('no_hp') is-invalid @enderror" 
                                    wire:model.blur="no_hp" placeholder="08xxxxxxxxxx">
                             @error('no_hp')
                                 <div class="invalid-feedback">{{ $message }}</div>

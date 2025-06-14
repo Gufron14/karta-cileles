@@ -259,7 +259,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Nama Lengkap</label>
-                                            <input type="text"
+                                            <input type="text" pattern="[^0-9]*" title="Tidak boleh angka"
                                                 class="form-control @error('nama_lengkap') is-invalid @enderror"
                                                 wire:model="nama_lengkap">
                                             @error('nama_lengkap')
@@ -277,7 +277,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">No. HP</label>
-                                            <input type="text"
+                                            <input type="number"
                                                 class="form-control @error('no_hp') is-invalid @enderror"
                                                 wire:model="no_hp">
                                             @error('no_hp')
@@ -325,7 +325,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Usia</label>
-                                            <input type="text"
+                                            <input type="number"
                                                 class="form-control @error('usia') is-invalid @enderror"
                                                 wire:model="usia">
                                             @error('usia')

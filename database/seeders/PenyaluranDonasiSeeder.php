@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Donasi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\PenyaluranDonasi;
@@ -15,9 +16,11 @@ class PenyaluranDonasiSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create('id_ID');
+        // $donasiIds = Donasi::pluck('id')->toArray();
         
         for ($i = 1; $i <= 20; $i++) {
             PenyaluranDonasi::create([
+                // 'donasi_id' => $faker->randomElement($donasiIds),
                 'tanggal' => $faker->dateTimeBetween('-3 months', 'now'),
                 'uang_keluar' => $faker->numberBetween(100000, 2000000),
                 'alamat' => $faker->address,
