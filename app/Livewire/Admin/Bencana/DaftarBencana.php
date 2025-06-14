@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Admin\Bencana;
 
+use App\Models\Bencana;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\Bencana;
-use App\Models\DokumentasiBencana;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use App\Models\DokumentasiBencana;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 #[Title('Kelola Bencana')]
 #[Layout('components.layouts.admin-layout')]
@@ -71,8 +72,17 @@ class DaftarBencana extends Component
         $this->resetPage();
     }
 
+     public function mount()
+    {
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    // Pastikan setiap aksi hanya bisa dilakukan oleh user yang login
     public function openModal()
     {
+        $this->authorizeAction();
         $this->resetForm();
         $this->editMode = false;
         $this->showModal = true;
@@ -80,18 +90,21 @@ class DaftarBencana extends Component
 
     public function closeModal()
     {
+        $this->authorizeAction();
         $this->showModal = false;
         $this->resetForm();
     }
 
     public function closeDetailModal()
     {
+        $this->authorizeAction();
         $this->showDetailModal = false;
         $this->selectedBencana = null;
     }
 
     public function resetForm()
     {
+        $this->authorizeAction();
         $this->nama_bencana = '';
         $this->lokasi = '';
         $this->tanggal_kejadian = '';
@@ -105,6 +118,7 @@ class DaftarBencana extends Component
 
     public function store()
     {
+        $this->authorizeAction();
         $this->validate();
 
         $bencana = Bencana::create([
@@ -123,6 +137,7 @@ class DaftarBencana extends Component
 
     public function edit($id)
     {
+        $this->authorizeAction();
         $bencana = Bencana::findOrFail($id);
         
         $this->bencanaId = $bencana->id;
@@ -138,6 +153,7 @@ class DaftarBencana extends Component
 
     public function update()
     {
+        $this->authorizeAction();
         $this->validate();
 
         $bencana = Bencana::findOrFail($this->bencanaId);
@@ -160,6 +176,7 @@ class DaftarBencana extends Component
 
     public function delete($id)
     {
+        $this->authorizeAction();
         $bencana = Bencana::findOrFail($id);
         
         // Hapus file dokumentasi
@@ -176,6 +193,7 @@ class DaftarBencana extends Component
 
     public function toggleStatus($id)
     {
+        $this->authorizeAction();
         $bencana = Bencana::findOrFail($id);
         $bencana->update([
             'status' => $bencana->status === 'aktif' ? 'selesai' : 'aktif'
@@ -186,12 +204,14 @@ class DaftarBencana extends Component
 
     public function showDetail($id)
     {
+        $this->authorizeAction();
         $this->selectedBencana = Bencana::with('dokumentasi')->findOrFail($id);
         $this->showDetailModal = true;
     }
 
     public function deleteFile($fileId)
     {
+        $this->authorizeAction();
         $dokumentasi = DokumentasiBencana::findOrFail($fileId);
         
         if (Storage::exists($dokumentasi->file_path)) {
@@ -208,6 +228,7 @@ class DaftarBencana extends Component
 
     private function uploadFiles($bencana)
     {
+        $this->authorizeAction();
         if (!empty($this->files)) {
             foreach ($this->files as $index => $file) {
                 if ($file) {
@@ -227,8 +248,18 @@ class DaftarBencana extends Component
         }
     }
 
+    // Helper untuk otorisasi
+    private function authorizeAction()
+    {
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
     public function render()
     {
+        $this->authorizeAction();
+
         $query = Bencana::query();
 
         if ($this->search) {
