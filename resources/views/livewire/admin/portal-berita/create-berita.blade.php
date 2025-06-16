@@ -128,37 +128,38 @@
                     'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
                     'insertdatetime', 'media', 'table', 'help', 'wordcount'
                 ],
-                toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image media link | help',
+                toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
                 content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                images_upload_url: '{{ route("upload.image") }}',
-                images_upload_handler: function (blobInfo, success, failure) {
-                    var xhr, formData;
-                    xhr = new XMLHttpRequest();
-                    xhr.withCredentials = false;
-                    xhr.open('POST', '{{ route("upload.image") }}');
-                    xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
-                    xhr.onload = function() {
-                        var json;
-                        if (xhr.status != 200) {
-                            failure('HTTP Error: ' + xhr.status);
-                            return;
-                        }
-                        json = JSON.parse(xhr.responseText);
-                        if (!json || typeof json.location != 'string') {
-                            failure('Invalid JSON: ' + xhr.responseText);
-                            return;
-                        }
-                        success(json.location);
-                    };
-                    formData = new FormData();
-                    formData.append('file', blobInfo.blob(), blobInfo.filename());
-                    xhr.send(formData);
-                },
-                setup: function (editor) {
-                    editor.on('change', function () {
-                        @this.set('isi', editor.getContent());
-                    });
-                }
+                menubar: false,
+                // images_upload_url: '{{ route("upload.image") }}',
+                // images_upload_handler: function (blobInfo, success, failure) {
+                //     var xhr, formData;
+                //     xhr = new XMLHttpRequest();
+                //     xhr.withCredentials = false;
+                //     xhr.open('POST', '{{ route("upload.image") }}');
+                //     xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                //     xhr.onload = function() {
+                //         var json;
+                //         if (xhr.status != 200) {
+                //             failure('HTTP Error: ' + xhr.status);
+                //             return;
+                //         }
+                //         json = JSON.parse(xhr.responseText);
+                //         if (!json || typeof json.location != 'string') {
+                //             failure('Invalid JSON: ' + xhr.responseText);
+                //             return;
+                //         }
+                //         success(json.location);
+                //     };
+                //     formData = new FormData();
+                //     formData.append('file', blobInfo.blob(), blobInfo.filename());
+                //     xhr.send(formData);
+                // },
+                // setup: function (editor) {
+                //     editor.on('change', function () {
+                //         @this.set('isi', editor.getContent());
+                //     });
+                // }
             });
         });
     </script>

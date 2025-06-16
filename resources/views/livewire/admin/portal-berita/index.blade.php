@@ -91,7 +91,7 @@
                                         </button>
                                         
                                         {{-- Edit --}}
-                                        <a href="{{ route('editBerita', $berita->id) }}" 
+                                        <a href="{{ route('editBeritaId', $berita->id) }}" 
                                            class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>

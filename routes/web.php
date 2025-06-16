@@ -29,6 +29,12 @@ use App\Livewire\Bantuan\Pakaian;
 //     return \DB::select('SELECT NOW()');
 // });
 
+Route::get('/check-session', function() {
+    session(['test' => 'ok']);
+    return session('test');
+});
+
+
 
 Route::get('/', Home::class)->name('/');
 
@@ -70,7 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::get('kelola-berita', \App\Livewire\Admin\PortalBerita\Index::class)->name('kelola-berita');
         Route::get('tambah-berita', \App\Livewire\Admin\PortalBerita\CreateBerita::class)->name('createBerita');
         Route::get('edit-berita', \App\Livewire\Admin\PortalBerita\UpdateBerita::class)->name('editBerita');
-        Route::get('edit-berita/{id}', \App\Livewire\Admin\PortalBerita\UpdateBerita::class)->name('editBerita');
+        Route::get('edit-berita/{id}', \App\Livewire\Admin\PortalBerita\UpdateBerita::class)->name('editBeritaId');
     
         // Route untuk upload gambar TinyMCE
         Route::post('upload-image', [\App\Http\Controllers\ImageUploadController::class, 'upload'])->name('upload.image');
