@@ -1,26 +1,54 @@
 <div>
     <header>
-        <!-- Background image -->
-        <div class="text-center bg-image"
-            style="
-      background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');
-      height: 400px;
-    ">
-            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100%;">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="col-6 text-white">
-                        <h3>Relawan Karang Taruna Kecamatan Cileles</h3>
-                        <h4 class="lead">
-                            Dimana kumpulan pemuda-pemudi yang peduli terhadap lingkungan sosial di wilayah Kecamatan
-                            Cileles. Mereka adalah generasi muda yang bergerak secara sukarela untuk membantu masyarakat
-                            melalui kegiatan sosial, kepemudaan, pemberdayaan, hingga penanganan masalah sosial di
-                            sekitar.
-                        </h4>
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="d-block w-100"
+                        style="background-image: url('{{ asset('assets/img/535c4f09-0339-48a6-9921-ee7ebe60e6b2.jpg') }}'); 
+                            height: 400px; background-size: cover; background-position: center;">
+                        <div class="mask" style="background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100%;">
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="col-6 text-white text-center">
+                                    <h3>Relawan Karang Taruna Kecamatan Cileles</h3>
+                                    <h4 class="lead">
+                                        Kumpulan pemuda-pemudi yang peduli terhadap lingkungan sosial di wilayah
+                                        Kecamatan Cileles.
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="d-block w-100"
+                        style="background-image: url('{{ asset('assets/img/d8cfdd66-8f60-44ef-964e-a2fcb4550b70.jpg') }}'); 
+                            height: 400px; background-size: cover; background-position: center;">
+                        <!-- Optional Mask + Text for slide 2 -->
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="d-block w-100"
+                        style="background-image: url('{{ asset('assets/img/a1bfc92b-20be-4912-8285-92b248d6c4ff.jpg') }}'); 
+                            height: 400px; background-size: cover; background-position: center;">
+                        <!-- Optional Mask + Text for slide 3 -->
                     </div>
                 </div>
             </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        <!-- Background image -->
     </header>
 
     <div class="container mt-5 mb-5">
@@ -30,7 +58,9 @@
                     <div class="col">
                         @php
                             $donasiTerkumpul = App\Models\Donasi::where('status', 'terverifikasi')->sum('nominal');
-                            $donasiTersaluraskan = App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar');
+                            $donasiTersaluraskan = App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum(
+                                'uang_keluar',
+                            );
 
                             $donasiTersedia = $donasiTerkumpul - $donasiTersaluraskan;
                         @endphp
@@ -53,7 +83,7 @@
                         </h4>
                         <span class="text-danger">Donasi Tersalurkan</span>
                     </div>
-                    
+
                     {{-- <div class="col">
                         <h4 class="fw-bold">
                             {{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
@@ -66,14 +96,14 @@
                             {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
                         <span>Pakaian Terkumpul</span>
                     </div> --}}
-                    
+
                     {{-- <div class="col">
                         <h4 class="fw-bold">
                             Rp{{ number_format(\App\Models\PenyaluranDonasi::where('status', 'terverifikasi')->sum('uang_keluar'), 0, ',', '.') }}
                         </h4>
                         <span>Dana Tersalurkan</span>
                     </div> --}}
-                    
+
                     <div class="col">
                         <h4 class="fw-bold">
                             {{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
@@ -100,7 +130,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="container-fluid mb-3" style="background-color: #f3f3f3;">
         <div class="container p-5">
@@ -134,7 +163,7 @@
                     {{-- Highlight Berita Utama --}}
                     @if ($latestBerita)
                         <div class="col-lg-6">
-                            <div class="card border-0 shadow-lg h-100 overflow-hidden">
+                            <div class="card h-100 overflow-hidden">
                                 <div class="position-relative">
                                     @if ($latestBerita->thumbnail)
                                         <img src="{{ $latestBerita->thumbnail_url ?? asset('storage/' . $latestBerita->thumbnail) }}"
@@ -170,7 +199,7 @@
                                         {{ $latestBerita->judul }}
                                     </h4>
                                     <p class="card-text text-muted mb-4">
-                                        {{ Str::limit(strip_tags($latestBerita->isi), 150) }}
+                                        {{ Str::limit(strip_tags($latestBerita->isi), 300) }}
                                     </p>
                                     <a href="{{ route('detailBerita', $latestBerita->slug) }}"
                                         class="btn btn-primary btn-lg px-4">
@@ -187,7 +216,7 @@
                         <div class="row g-3 h-100">
                             @forelse($otherBerita as $berita)
                                 <div class="col-12">
-                                    <div class="card border-0 shadow-sm h-100">
+                                    <div class="card h-100">
                                         <div class="row g-0 h-100">
                                             <div class="col-4">
                                                 @if ($berita->thumbnail)
@@ -299,71 +328,91 @@
         </div>
     </section>
 
-
     {{-- Pasca Bencana --}}
     <div class="container">
         <h4 class="fw-bold text-center py-4">Pasca Bencana</h4>
-        <!-- Gallery -->
-        <div class="row">
-            <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
 
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Wintry Mountain Landscape" />
+        {{-- Grid Dokumentasi Bencana --}}
+        @if ($dokumentasiFoto && $dokumentasiFoto->count() > 0)
+            <div class="row g-3 mb-4">
+                @foreach ($dokumentasiFoto as $foto)
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card border-0 shadow-sm overflow-hidden">
+                            <img src="{{ asset('storage/' . $foto->file_path) }}"
+                                alt="{{ $foto->keterangan ?? 'Dokumentasi Bencana' }}" class="card-img-top"
+                                style="height: 250px; object-fit: cover;">
+                        </div>
+                    </div>
+                @endforeach
             </div>
-
-            <div class="col-lg-4 mb-4 mb-lg-0">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Mountains in the Clouds" />
-
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+        @else
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-6">
+                    <div class="text-center py-5">
+                        <h5 class="text-muted">Dokumentasi Bencana Belum Tersedia</h5>
+                    </div>
+                </div>
             </div>
+        @endif
 
-            <div class="col-lg-4 mb-4 mb-lg-0">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Waves at Sea" />
-
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
-                    class="w-100 shadow-1-strong rounded mb-4" alt="Yosemite National Park" />
-            </div>
-        </div>
-        <!-- Gallery -->
         <div class="text-center mt-3">
-            <a href="{{ route('berita') }}" class="btn btn-danger">
+            <a href="{{ route('pascaBencana') }}" class="btn btn-danger">
                 Lihat Dokumentasi Bencana <i class="fas fa-arrow-right"></i>
             </a>
         </div>
     </div>
 
+
     {{-- Kolaborasi --}}
     <div class="container">
         <h4 class="fw-bold text-center py-4 mt-4">Kolaborasi</h4>
-        <div class="row">
-            <div class="col">
-                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
+        <div class="row justify-content-center align-items-center">
+            <div class="col text-center">
+                <a href="{{ route('donatur') }}" style="text-decoration: none; color: inherit;">
+                    <img src="{{ asset('assets/img/crowd-funding.svg') }}" alt=""
+                        class="img-fluid uniform-img" style="width: 300px; height: 300px; object-fit: contain;">
+
+                </a>
+                <h5 class="fw-bold">Donasi</h5>
             </div>
-            <div class="col">
-                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
+            <div class="col text-center">
+                <a href="{{ route('pakaian') }}">
+                    <img src="{{ asset('assets/img/Charity market-pana.svg') }}" alt=""
+                        class="img-fluid uniform-img" style="width: 300px; height: 300px; object-fit: contain;">
+
+                </a>
+                <h5 class="fw-bold">Pakaian</h5>
             </div>
-            <div class="col">
-                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
+            <div class="col text-center">
+                <a href="{{ route('makanan') }}">
+                    <img src="{{ asset('assets/img/Charity-bro.svg') }}" alt=""
+                        class="img-fluid uniform-img" style="width: 200px; height: 300px; object-fit: contain;">
+
+                </a>
+                <h5 class="fw-bold">Makanan</h5>
             </div>
-            <div class="col">
-                <img src="{{ asset('bantuan 1.png') }}" class="img-fluid img-thumbnail" alt="">
+            <div class="col text-center">
+                <a href="{{ route('formRelawan') }}">
+                    <img src="{{ asset('assets/img/Humanitarian Help-cuate.svg') }}" alt=""
+                        class="img-fluid uniform-img" style="width: 300px; height: 300px; object-fit: contain;">
+
+                </a>
+                <h5 class="fw-bold">Relawan</h5>
             </div>
         </div>
-    </div>
 
+    </div>
 
     {{-- Benefit Relawan --}}
     <div class="container mb-5 p-5">
         <h4 class="fw-bold text-center">Benefit Menjadi Relawan Karang Taruna</h4>
-        <div class="row g-4 py-4 row-cols-1 row-cols-lg-3">
+        <div class="row g-3 py-4 row-cols-1 row-cols-lg-3">
             <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('bantuan 1.png') }}" class="card-img-top" alt="...">
+                <div class="card border-0 shadow-sm" style="width: 18rem;">
+                    <div class="ratio ratio-4x3">
+                        <img src="{{ asset('assets/img/535c4f09-0339-48a6-9921-ee7ebe60e6b2.jpg') }}"
+                            class="card-img-top object-fit-cover" alt="...">
+                    </div>
                     <div class="card-body">
                         <p class="card-text">Dapat membantu orang lain di masa sulit, relawan merasakan kepuasan batin
                             dan menjadikan hidup lebih bermanfaat serta bermakna.</p>
@@ -371,8 +420,11 @@
                 </div>
             </div>
             <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('bantuan 1.png') }}" class="card-img-top" alt="...">
+                <div class="card border-0 shadow-sm" style="width: 18rem;">
+                    <div class="ratio ratio-4x3">
+                        <img src="{{ asset('assets/img/a1bfc92b-20be-4912-8285-92b248d6c4ff.jpg') }}"
+                            class="card-img-top object-fit-cover" alt="...">
+                    </div>
                     <div class="card-body">
                         <p class="card-text">Mengasah empati, keterampilan komunikasi, kerja sama tim, dan
                             kepemimpinan, serta memperluas wawasan sosial.</p>
@@ -380,8 +432,11 @@
                 </div>
             </div>
             <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('bantuan 1.png') }}" class="card-img-top" alt="...">
+                <div class="card border-0 shadow-sm" style="width: 18rem;">
+                    <div class="ratio ratio-4x3">
+                        <img src="{{ asset('assets/img/d8cfdd66-8f60-44ef-964e-a2fcb4550b70.jpg') }}"
+                            class="card-img-top object-fit-cover" alt="...">
+                    </div>
                     <div class="card-body">
                         <p class="card-text">Dapat terlibat aktif dalam menyalurkan bantuan, mendampingi korban, dan
                             memulihkan kondisi lingkungan yang terdampak bencana.</p>
@@ -391,7 +446,7 @@
         </div>
 
         {{-- Panduan Umum --}}
-        <div class="container">
+        <div class="container mt-4">
             <h4 class="fw-bold text-center mb-3">Panduan Umum</h4>
             <div class="accordion" id="accordionExample">
                 <div class="accordion-item">

@@ -96,7 +96,8 @@
                                     <div class="btn-group" role="group">
                                         @if ($pakaian->status == 'pending')
                                             <button class="btn btn-sm btn-success"
-                                                wire:click="verifikasi({{ $pakaian->id }})" title="Verifikasi">
+                                                wire:click="verifikasi({{ $pakaian->id }})" title="Verifikasi"
+                                                wire:confirm="Apakah Anda yakin ingin memverifikasi data ini?">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         @endif
@@ -224,7 +225,7 @@
                                     <option value="Laki-laki">Laki-laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                     <option value="Anak-anak">Anak-anak</option>
-                                    <option value="Perempuan">Laki-laki, Perempuan, dan Anak-anak</option>
+                                    <option value="Laki-laki, Perempuan, dan Anak-anak">Laki-laki, Perempuan, dan Anak-anak</option>
                                 </select>
                                 @error('jenis_pakaian')
                                     <div class="invalid-feedback">{{ $message }}</div>

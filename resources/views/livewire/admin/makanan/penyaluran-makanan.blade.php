@@ -89,11 +89,13 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-sm btn-warning"
+                                        @if ($penyaluran->status == 'pending')                                            
+                                        <button class="btn btn-sm btn-success"
                                             wire:click="updateStatus({{ $penyaluran->id }})" title="Ubah Status"
                                             wire:confirm="Apakah Anda yakin ingin memverifikasi data ini?">
-                                            <i class="fas fa-sync"></i>
+                                            <i class="fas fa-check"></i>
                                         </button>
+                                        @endif
                                         <button class="btn btn-sm btn-primary" wire:click="edit({{ $penyaluran->id }})"
                                             title="Edit">
                                             <i class="fas fa-edit"></i>
