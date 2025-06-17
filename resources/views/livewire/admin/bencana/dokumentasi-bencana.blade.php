@@ -11,7 +11,8 @@
         </div>
         <div class="card-body">
             {{-- Form Tambah/Edit --}}
-            <form wire:submit.prevent="{{ $editId ? 'update' : 'store' }}" class="mb-4">
+            <form wire:submit.prevent="{{ $editId ? 'update' : 'store' }}" class="mb-4" enctype="multipart/form-data">
+                @csrf
                 <div class="row g-2 align-items-end">
                     <div class="col-md-3">
                         <label class="form-label">Bencana</label>

@@ -5,14 +5,13 @@ namespace App\Livewire\Admin\Bencana;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Bencana;
-use App\Models\DokumentasiBencana as  DokumentasiBencanaModel;;
+use App\Models\DokumentasiBencana as DokumentasiBencanaModel;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 
 #[Title('Dokumentasi Bencana')]
 #[Layout('components.layouts.admin-layout')]
-
 class DokumentasiBencana extends Component
 {
     use WithFileUploads;
@@ -105,27 +104,27 @@ class DokumentasiBencana extends Component
         session()->flash('success', 'Dokumentasi berhasil dihapus!');
     }
 
-public function render()
-{
-    $bencanas = Bencana::orderBy('tanggal_kejadian', 'desc')->get();
+    public function render()
+    {
+        $bencanas = Bencana::orderBy('tanggal_kejadian', 'desc')->get();
 
-    $query = DokumentasiBencanaModel::query()->with('bencana');
-    if ($this->search) {
-        $query->where('keterangan', 'like', '%' . $this->search . '%');
+        $query = DokumentasiBencanaModel::query()->with('bencana');
+        if ($this->search) {
+            $query->where('keterangan', 'like', '%' . $this->search . '%');
+        }
+        if ($this->bencanaFilter) {
+            $query->where('bencana_id', $this->bencanaFilter);
+        }
+        $dokumentasis = $query->orderBy('created_at', 'desc')->get();
+
+        // Kelompokkan berdasarkan bencana_id dan keterangan
+        $grouped = $dokumentasis->groupBy(function ($item) {
+            return $item->bencana_id . '||' . ($item->keterangan ?? '');
+        });
+
+        return view('livewire.admin.bencana.dokumentasi-bencana', [
+            'bencanas' => $bencanas,
+            'groupedDokumentasi' => $grouped,
+        ]);
     }
-    if ($this->bencanaFilter) {
-        $query->where('bencana_id', $this->bencanaFilter);
-    }
-    $dokumentasis = $query->orderBy('created_at', 'desc')->get();
-
-    // Kelompokkan berdasarkan bencana_id dan keterangan
-    $grouped = $dokumentasis->groupBy(function($item) {
-        return $item->bencana_id . '||' . ($item->keterangan ?? '');
-    });
-
-    return view('livewire.admin.bencana.dokumentasi-bencana', [
-        'bencanas' => $bencanas,
-        'groupedDokumentasi' => $grouped,
-    ]);
-}
 }
