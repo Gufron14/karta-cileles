@@ -46,12 +46,12 @@ RUN npm install && npm run build
 RUN echo "upload_max_filesize=50M\npost_max_size=50M\nmax_execution_time=300\nmax_input_time=300\nmemory_limit=256M\nsession.cookie_secure=0\nsession.cookie_httponly=1\nsession.cookie_samesite=Lax" > /usr/local/etc/php/conf.d/uploads.ini
 
 # Set permission lagi setelah semua operasi selesai
-RUN chown -R www-data:www-data /var/www/html/storage \
-    && chown -R www-data:www-data /var/www/html/public/storage \
-    && chown -R www-data:www-data /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/public/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+# RUN chown -R www-data:www-data /var/www/html/storage \
+#     && chown -R www-data:www-data /var/www/html/public/storage \
+#     && chown -R www-data:www-data /var/www/html/bootstrap/cache \
+#     && chmod -R 775 /var/www/html/storage \
+#     && chmod -R 775 /var/www/html/public/storage \
+#     && chmod -R 775 /var/www/html/bootstrap/cache
 
 # Tambahkan script untuk memastikan permission saat container start
 COPY docker-entrypoint.sh /usr/local/bin/
