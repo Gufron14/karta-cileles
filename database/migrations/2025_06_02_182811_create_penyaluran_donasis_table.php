@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('uang_keluar', 15, 2);
             $table->string('alamat');
             $table->integer('jml_kpl_keluarga');
+            $table->json('nam_kk')->nullable();
             $table->text('keterangan')->nullable();
             $table->enum('status', ['pending', 'terverifikasi'])->default('pending');
             $table->timestamps();

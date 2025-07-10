@@ -12,6 +12,7 @@ class Makanan extends Model
     protected $fillable = [
         'jenis_makanan',
         'jumlah_makanan',
+        'satuan',
         'nama_donatur',
         'tanggal',
         'status',

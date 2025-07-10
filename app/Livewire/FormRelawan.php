@@ -26,16 +26,16 @@ class FormRelawan extends Component
     protected $rules = [
         'email' => 'required|email|unique:relawans,email',
         'nama_lengkap' => 'required|min:3',
-        'no_hp' => 'required|numeric|min:10',
+        'no_hp' => 'required|string|min:10|max:13',
         'tempat_lahir' => 'required',
         'tanggal_lahir' => 'required|date',
         'alamat' => 'required|min:10',
-        'usia' => 'required',
+        'usia' => 'nullable',
         'pendidikan_terakhir' => 'required',
         'jenis_kelamin' => 'required',
-        'ketertarikan' => 'required|min:20',
-        'kegiatan' => 'required|min:20',
-        'dokumentasi' => 'required|min:10',
+        'ketertarikan' => 'required',
+        'kegiatan' => 'required',
+        'dokumentasi' => 'required',
     ];
 
     protected $messages = [

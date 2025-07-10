@@ -44,7 +44,7 @@ class Relawan extends Component
     protected $rules = [
         'nama_lengkap' => 'required|min:3',
         'email' => 'required|email',
-        'no_hp' => 'required|numeric',
+        'no_hp' => 'required|string|min:10|max:13',
         'alamat' => 'required|min:10',
         'jenis_kelamin' => 'required',
         'tempat_lahir' => 'required',

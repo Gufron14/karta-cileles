@@ -22,7 +22,7 @@ public function up(): void
         $table->date('tanggal_lahir');
         $table->string('jenis_kelamin');
         $table->string('pendidikan_terakhir');
-        $table->string('usia');
+        $table->string('usia')->nullable();
         $table->string('ketertarikan');
         $table->string('kegiatan');
         $table->string('dokumentasi');

@@ -68,6 +68,7 @@
                             {{-- <th>Jumlah Makanan</th> --}}
                             <th>Alamat</th>
                             <th>Jumlah KK</th>
+                            <th>Nama-nama Kepala Keluarga</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -80,6 +81,15 @@
                                 {{-- <td>{{ number_format($penyaluran->jumlah) }} porsi</td> --}}
                                 <td class="text-start">{{ $penyaluran->alamat }}</td>
                                 <td>{{ number_format($penyaluran->jml_kk) }} KK</td>
+                                <td>
+                                    @if($penyaluran->nama_kk)
+                                    @foreach(json_decode($penyaluran->nama_kk) as $nama)
+                                        {{ $nama }},
+                                    @endforeach
+                                @else
+                                    <span class="text-muted">Tidak ada data</span>
+                                @endif
+                                </td>
                                 <td class="text-start">
                                     @if ($penyaluran->status == 'disalurkan')
                                         <span class="badge bg-success">Disalurkan</span>
@@ -164,6 +174,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label for="nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
+                                <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
+                                    placeholder="Nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
+                                @error('nama_kk')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
                                 <label for="tanggal" class="form-label">Tanggal Penyaluran</label>
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
                                     wire:model="tanggal">
@@ -228,6 +246,15 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label for="edit_nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
+                                <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
+                                    placeholder="Nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
+                                @error('nama_kk')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="mb-3">
                                 <label for="edit_tanggal" class="form-label">Tanggal Penyaluran</label>
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
                                     wire:model="tanggal">
@@ -289,6 +316,20 @@
                                         porsi/KK</strong>
                                 </div>
                             </div>
+                            <hr>
+<div class="row">
+    <div class="col-5"><strong>Nama-nama KK:</strong></div>
+    <div class="col-7">
+        @if($detailData->nama_kk)
+            @foreach(json_decode($detailData->nama_kk) as $nama)
+                <span class="badge bg-info me-1 mb-1">{{ $nama }}</span>
+            @endforeach
+        @else
+            <span class="text-muted">Tidak ada data</span>
+        @endif
+    </div>
+</div>
+
                             <hr>
                             <div class="row">
                                 <div class="col-5"><strong>Tanggal Penyaluran:</strong></div>

@@ -10,6 +10,7 @@ class Donasi extends Model
     
     protected $fillable = [
         'nama_donatur',
+        'kode_transaksi',
         'email',
         'no_hp',
         'catatan',

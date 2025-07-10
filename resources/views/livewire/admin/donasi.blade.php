@@ -74,6 +74,7 @@
                         <tr>
                             <th class="text-center">No</th>
                             <th>Tanggal</th>
+                            <th>Kode Transaksi</th>
                             <th>Nama Donatur</th>
                             {{-- <th>Email</th>
                             <th>No. HP</th> --}}
@@ -87,6 +88,11 @@
                             <tr>
                                 <td class="text-center">{{ $donasis->firstItem() + $index }}</td>
                                 <td>{{ $donasi->created_at ? $donasi->created_at->format('d/m/Y') : '-' }}</td>
+                                <td>
+                                    <span class="badge rounded-pill text-bg-primary">
+                                        {{ $donasi->kode_transaksi }}
+                                    </span>
+                                </td>
                                 <td class="text-start">{{ $donasi->nama_donatur }}</td>
                                 {{-- <td class="text-start">{{ $donasi->email }}</td>
                                 <td>
@@ -213,6 +219,7 @@
                             <th>Uang Keluar</th>
                             <th>Alamat Penyaluran</th>
                             <th>Jml. KK</th>
+                            <th>Nama-nama Kpl. Keluarga</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -225,6 +232,15 @@
                                 <td class="text-start">{{ $penyaluran->uang_keluar_formatted }}</td>
                                 <td class="text-start">{{ Str::limit($penyaluran->alamat, 30) }}</td>
                                 <td>{{ $penyaluran->jml_kpl_keluarga }} KK</td>
+                                <td>
+                                    @if($penyaluran->nama_kk)
+                                    @foreach(json_decode($penyaluran->nama_kk) as $nama)
+                                        {{ $nama }},
+                                    @endforeach
+                                @else
+                                    <span class="text-muted">Tidak ada data</span>
+                                @endif
+                                </td>
                                 <td>
                                     @if ($penyaluran->status == 'terverifikasi')
                                         <span class="badge bg-success">Disalurkan</span>
@@ -467,6 +483,14 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
+                                    <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
+                                        placeholder="Nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
+                                    @error('nama_kk')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="row">

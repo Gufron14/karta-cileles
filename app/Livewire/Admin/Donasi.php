@@ -21,6 +21,7 @@ class Donasi extends Component
     public $filterBulanDonasi = '';
     public $filterTahunDonasi = '';
     public $filterStatusDonasi = '';
+    public $nama_kk = '';
     
     public $searchPenyaluran = '';
     public $filterBulanPenyaluran = '';
@@ -118,17 +119,24 @@ class Donasi extends Component
             'catatan' => 'nullable|max:500',
             'status_donasi' => 'required|in:pending,terverifikasi',
         ];
-
+    
         if (!$this->donasiId) {
             $rules['bukti_transfer'] = 'required|image|max:2048';
         } else {
             $rules['bukti_transfer'] = 'nullable|image|max:2048';
         }
-
+    
         $this->validate($rules);
-
+    
         try {
+            // Generate kode transaksi
+            $tanggal = date('dmY');
+            $lastDonasi = DonasiModel::whereDate('created_at', today())->count();
+            $nomorUrut = str_pad($lastDonasi + 1, 4, '0', STR_PAD_LEFT);
+            $kodeTransaksi = 'DNS' . $tanggal . $nomorUrut;
+    
             $data = [
+                'kode_transaksi' => $kodeTransaksi,
                 'nama_donatur' => $this->nama_donatur,
                 'email' => $this->email,
                 'no_hp' => $this->no_hp,
@@ -136,24 +144,20 @@ class Donasi extends Component
                 'catatan' => $this->catatan,
                 'status' => $this->status_donasi,
             ];
-
+    
             if ($this->bukti_transfer) {
                 $data['bukti_transfer'] = $this->bukti_transfer->store('bukti-transfer', 'public');
             }
-
-            // if ($this->donasiId) {
-            //     DonasiModel::find($this->donasiId)->update($data);
-            //     session()->flash('success', 'Data donasi berhasil diperbarui!');
-            // } else {
-            // }
+    
             DonasiModel::create($data);
             session()->flash('success', 'Data donasi berhasil ditambahkan!');
-
+    
             $this->closeModalDonasi();
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+    
 
     public function verifikasiDonasi($id)
     {
@@ -187,6 +191,7 @@ class Donasi extends Component
             $this->uang_keluar = $penyaluran->uang_keluar;
             $this->alamat = $penyaluran->alamat;
             $this->jml_kpl_keluarga = $penyaluran->jml_kpl_keluarga;
+            $this->nama_kk = $penyaluran->nama_kk;
             $this->keterangan = $penyaluran->keterangan;
             $this->status_penyaluran = $penyaluran->status;
         }
@@ -206,6 +211,7 @@ class Donasi extends Component
         $this->uang_keluar = '';
         $this->alamat = '';
         $this->jml_kpl_keluarga = '';
+        $this->nama_kk = '';
         $this->keterangan = '';
         $this->status_penyaluran = 'pending';
         $this->resetErrorBag();
@@ -218,6 +224,7 @@ public function savePenyaluran()
         'uang_keluar' => 'required|numeric|min:1000',
         'alamat' => 'required|min:5|max:255',
         'jml_kpl_keluarga' => 'required|numeric|min:1',
+        'nama_kk' => 'required|string',
         'keterangan' => 'nullable|max:500',
         'status_penyaluran' => 'required|in:pending,terverifikasi',
     ]);
@@ -241,6 +248,7 @@ public function savePenyaluran()
             'uang_keluar' => $this->uang_keluar,
             'alamat' => $this->alamat,
             'jml_kpl_keluarga' => $this->jml_kpl_keluarga,
+            'nama_kk' => $this->nama_kk ? json_encode(array_map('trim', explode(',', $this->nama_kk))) : null,
             'keterangan' => $this->keterangan,
             'status' => $this->status_penyaluran,
         ];

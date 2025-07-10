@@ -13,7 +13,12 @@ class PenyaluranMakanan extends Model
         'jumlah',
         'alamat',
         'jml_kk',
+        'nama_kk',  
         'tanggal',
         'status',
+    ];
+
+    protected $casts = [
+        'nama_kk' => 'array'
     ];
 }

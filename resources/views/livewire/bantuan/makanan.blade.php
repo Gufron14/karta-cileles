@@ -135,6 +135,7 @@
                                 <th>Alamat</th>
                                 {{-- <th>Jumlah Makanan</th> --}}
                                 <th>Jumlah KK</th>
+                                <th>Nama-nama Kpl. Keluarga</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -144,8 +145,18 @@
                                     <td>{{ $penyalurans->firstItem() + $index }}</td>
                                     <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
                                     <td class="text-start">{{ $penyaluran->alamat }}</td>
+
+                                    </td>
                                     {{-- <td>{{ $penyaluran->jumlah }}</td> --}}
                                     <td>{{ $penyaluran->jml_kk }}</td>
+                                    <td>
+                                        @if ($penyaluran->nama_kk)
+                                        @foreach (json_decode($penyaluran->nama_kk) as $nama)
+                                            {{ $nama }},
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">Tidak ada data</span>
+                                    @endif
                                     <td>
                                         @if ($penyaluran->status == 'disalurkan')
                                             <span class="badge bg-success">Disalurkan</span>

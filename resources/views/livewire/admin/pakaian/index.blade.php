@@ -150,7 +150,7 @@
                                     wire:model="jenis_pakaian" placeholder="Contoh: Baju, Celana, Jaket"> --}}
                                 <select class="form-select @error('jenis_pakaian') is-invalid @enderror"
                                     wire:model="jenis_pakaian" aria-label="Default select example">
-                                    <option selected muted disabled>-- Pilih Jenis --</option>
+                                    <option value="" selected muted disabled>-- Pilih Jenis --</option>
                                     <option value="Laki-laki">Laki-laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                     <option value="Anak-anak">Anak-anak</option>

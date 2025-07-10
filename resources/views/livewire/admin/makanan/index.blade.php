@@ -11,7 +11,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="card-title mb-0">
-                Data Bantuan Makanan
+                Data Bantuan Sembako
             </h5>
             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahModal"
                 wire:click="resetForm">
@@ -71,8 +71,8 @@
                             <th>No.</th>
                             <th>Tanggal</th>
                             <th class="text-start">Nama Donatur</th>
-                            <th>Jenis Makanan</th>
-                            {{-- <th>Jumlah</th> --}}
+                            <th>Jenis Sembako</th>
+                            <th>Jumlah</th>
                             <th class="text-start">Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -84,13 +84,13 @@
                                 <td>{{ \Carbon\Carbon::parse($makanan->tanggal)->format('d/m/Y') }}</td>
                                 <td class="text-start">{{ $makanan->nama_donatur }}</td>
                                 <td class="text-start">{{ $makanan->jenis_makanan }}</td>
-                                {{-- <td class="text-end">
+                                <td class="text-center">
                                     @if ($makanan->jumlah_makanan)
-                                        {{ number_format($makanan->jumlah_makanan) }} porsi
+                                        {{ number_format($makanan->jumlah_makanan) }} {{ $makanan->satuan }}
                                     @else
                                         -
                                     @endif
-                                </td> --}}
+                                </td>
                                 <td class="text-start">
                                     @if ($makanan->status == 'terverifikasi')
                                         <span class="badge bg-success">Terverifikasi</span>
@@ -143,30 +143,51 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="tambahModalLabel">Tambah Data Makanan</h1>
+                        <h1 class="modal-title fs-5" id="tambahModalLabel">Tambah Data Sembako</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form wire:submit.prevent="store">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="jenis_makanan" class="form-label">Kategori Makanan</label>
+                                <label for="jenis_makanan" class="form-label">Jenis Sembako</label>
                                 <input type="text" class="form-control @error('jenis_makanan') is-invalid @enderror" wire:model="jenis_makanan"
                                 placeholder="Makanan pokok, makanan ringan, minuman, DLL)">
                                 @error('jenis_makanan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            {{-- <div class="mb-3">
-                                <label for="jumlah_makanan" class="form-label">Jumlah Makanan (Opsional)</label>
-                                <input type="number"
-                                    class="form-control @error('jumlah_makanan') is-invalid @enderror"
-                                    wire:model="jumlah_makanan" placeholder="Masukkan jumlah makanan (porsi)"
-                                    min="1">
-                                @error('jumlah_makanan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <div class="form-text">Kosongkan jika jumlah tidak diketahui</div>
-                            </div> --}}
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="jumlah_makanan" class="form-label">Jumlah</label>
+                                        <input type="number"
+                                            class="form-control @error('jumlah_makanan') is-invalid @enderror"
+                                            wire:model="jumlah_makanan" placeholder="Masukkan jumlah makanan (porsi)"
+                                            min="1">
+                                        @error('jumlah_makanan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="satuan" class="form-label">Satuan</label>
+                                        <select name="satuan" id="satuan" class="form-select @error('satuan') is-invalid @enderror" wire:model="satuan">
+                                            <option value="" selected>-- Pilih -- </option>
+                                            <option value="gram">Gram (g)</option>
+                                            <option value="kg">Kilogram (kg)</option>
+                                            <option value="liter">Liter (l)</option>
+                                            <option value="kaleng">Kaleng</option>
+                                            <option value="butir">Butir</option>
+                                        </select>
+                                        @error('satuan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="mb-3">
                                 <label for="nama_donatur" class="form-label">Nama Donatur</label>
                                 <input type="text" class="form-control @error('nama_donatur') is-invalid @enderror"
@@ -209,14 +230,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="editModalLabel">Edit Data Makanan</h1>
+                        <h1 class="modal-title fs-5" id="editModalLabel">Edit Data Sembako</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <form wire:submit.prevent="update">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="edit_jenis_makanan" class="form-label">Jenis Makanan</label>
+                                <label for="edit_jenis_makanan" class="form-label">Jenis Sembako</label>
                                 <input type="text"
                                     class="form-control @error('jenis_makanan') is-invalid @enderror"
                                     wire:model="jenis_makanan" placeholder="Contoh: Nasi Bungkus, Roti, Mie Instan">
@@ -225,15 +246,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="edit_jumlah_makanan" class="form-label">Jumlah Makanan (Opsional)</label>
+                                <label for="edit_jumlah_makanan" class="form-label">Jumlah</label>
                                 <input type="number"
                                     class="form-control @error('jumlah_makanan') is-invalid @enderror"
-                                    wire:model="jumlah_makanan" placeholder="Masukkan jumlah makanan (porsi)"
+                                    wire:model="jumlah_makanan" placeholder="Masukkan jumlah makanan"
                                     min="1">
                                 @error('jumlah_makanan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div class="form-text">Kosongkan jika jumlah tidak diketahui</div>
                             </div>
                             <div class="mb-3">
                                 <label for="edit_nama_donatur" class="form-label">Nama Donatur</label>
@@ -277,14 +297,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="detailModalLabel">Detail Data Makanan</h1>
+                        <h1 class="modal-title fs-5" id="detailModalLabel">Detail Data Sembako</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @if ($detailData)
                             <div class="row">
-                                <div class="col-4"><strong>Jenis Makanan:</strong></div>
+                                <div class="col-4"><strong>Jenis Sembako:</strong></div>
                                 <div class="col-8">{{ $detailData->jenis_makanan }}</div>
                             </div>
                             <hr>

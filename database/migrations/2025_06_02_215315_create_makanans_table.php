@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('jenis_makanan');
             $table->integer('jumlah_makanan')->nullable();
+            $table->string('satuan')->nullable();
             $table->string('nama_donatur');
             $table->date('tanggal');
             $table->enum('status', ['pending', 'terverifikasi'])->default('pending');

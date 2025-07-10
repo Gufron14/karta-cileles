@@ -89,7 +89,7 @@
                                         <span class="badge bg-secondary">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @if ($penyaluran->status == 'pending')                                            
                                             <button class="btn btn-sm btn-success"

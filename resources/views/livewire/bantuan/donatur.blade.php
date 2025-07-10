@@ -6,6 +6,12 @@
 
     <div class="container p-5">
 
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Data Donasi Card -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -64,6 +70,7 @@
                             <tr class="text-center">
                                 <th class="text-center">No</th>
                                 <th>Tanggal</th>
+                                <th>Kode Transaksi</th>
                                 <th>Nama Donatur</th>
                                 {{-- <th>Email</th>
                             <th>No. HP</th> --}}
@@ -77,6 +84,13 @@
                                     <td class="text-center">{{ $donasis->firstItem() + $index }}</td>
                                     <td class="text-center">
                                         {{ $donasi->created_at ? $donasi->created_at->format('d/m/Y') : '-' }}</td>
+                                    <td class="text-center">
+                                        @if ($donasi->kode_transaksi)
+                                            <span class="badge text-bg-primary">
+                                                {{ $donasi->kode_transaksi }}
+                                            </span>
+                                        @endif
+                                    </td>
                                     <td>{{ $donasi->nama_donatur }}</td>
                                     {{-- <td class="text-start">{{ $donasi->email }}</td>
                                 <td>
@@ -176,6 +190,7 @@
                                 <th>Uang Keluar</th>
                                 <th>Alamat Penyaluran</th>
                                 <th>Jml. KK</th>
+                                <th>Nama-nama Kpl. Keluarga</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -188,6 +203,15 @@
                                     <td>{{ $penyaluran->uang_keluar_formatted }}</td>
                                     <td>{{ Str::limit($penyaluran->alamat, 30) }}</td>
                                     <td class="text-center">{{ $penyaluran->jml_kpl_keluarga }} KK</td>
+                                    <td>
+                                        @if ($penyaluran->nama_kk)
+                                            @foreach (json_decode($penyaluran->nama_kk) as $nama)
+                                                {{ $nama }},
+                                            @endforeach
+                                        @else
+                                            <span class="text-muted">Tidak ada data</span>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if ($penyaluran->status == 'terverifikasi')
                                             <span class="badge bg-success">Disalurkan</span>

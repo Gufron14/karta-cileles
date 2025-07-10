@@ -19,6 +19,8 @@ class PenyaluranMakanan extends Component
     public $jumlah = 0;
     public $alamat = '';
     public $jml_kk = 0;
+    public $nama_kk = '';
+
     public $tanggal;
     public $status = 'pending';
 
@@ -31,13 +33,14 @@ class PenyaluranMakanan extends Component
     public $editId = null;
     public $detailData = null;
 
-        protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'bootstrap';
 
 
     protected $rules = [
         'jumlah' => 'required|integer|min:1',
         'alamat' => 'required|string|max:255',
         'jml_kk' => 'required|integer|min:1',
+        'nama_kk' => 'required|string',
         'tanggal' => 'required|date',
         'status' => 'required|in:pending,disalurkan',
     ];
@@ -88,7 +91,7 @@ class PenyaluranMakanan extends Component
 
     public function resetForm()
     {
-        $this->reset(['jumlah', 'alamat', 'jml_kk', 'status', 'editId']);
+        $this->reset(['jumlah', 'alamat', 'jml_kk', 'nama_kk', 'status', 'editId']);
         $this->tanggal = date('Y-m-d');
         $this->resetErrorBag();
     }
@@ -107,6 +110,7 @@ class PenyaluranMakanan extends Component
             'jumlah' => $this->jumlah,
             'alamat' => $this->alamat,
             'jml_kk' => $this->jml_kk,
+            'nama_kk' => $this->nama_kk ? json_encode(array_map('trim', explode(',', $this->nama_kk))) : null,
             'tanggal' => $this->tanggal,
             'status' => $this->status,
         ]);
@@ -124,6 +128,7 @@ class PenyaluranMakanan extends Component
         $this->jumlah = $penyaluran->jumlah;
         $this->alamat = $penyaluran->alamat;
         $this->jml_kk = $penyaluran->jml_kk;
+        $this->nama_kk = $penyaluran->nama_kk ? implode(', ', json_decode($penyaluran->nama_kk)) : '';
         $this->tanggal = $penyaluran->tanggal;
         $this->status = $penyaluran->status;
 

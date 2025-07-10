@@ -18,6 +18,7 @@ class Index extends Component
     // Form properties
     public $jenis_makanan = '';
     public $jumlah_makanan = '';
+    public $satuan;
     public $nama_donatur = '';
     public $tanggal;
     public $status = 'pending';
@@ -37,6 +38,7 @@ class Index extends Component
     protected $rules = [
         'jenis_makanan' => 'required|string|max:255',
         'jumlah_makanan' => 'nullable|integer|min:1',
+        'satuan' => 'nullable|string|max:255',
         'nama_donatur' => 'required|string|max:255',
         'tanggal' => 'required|date',
         'status' => 'required|in:pending,terverifikasi',
@@ -112,6 +114,7 @@ class Index extends Component
         Makanan::create([
             'jenis_makanan' => $this->jenis_makanan,
             'jumlah_makanan' => $this->jumlah_makanan ?: null,
+            'satuan' => $this->satuan,
             'nama_donatur' => $this->nama_donatur,
             'tanggal' => $this->tanggal,
             'status' => $this->status,
@@ -129,6 +132,7 @@ class Index extends Component
         $this->editId = $id;
         $this->jenis_makanan = $makanan->jenis_makanan;
         $this->jumlah_makanan = $makanan->jumlah_makanan;
+        $this->satuan = $makanan->satuan;
         $this->nama_donatur = $makanan->nama_donatur;
         $this->tanggal = $makanan->tanggal;
         $this->status = $makanan->status;
@@ -144,6 +148,7 @@ class Index extends Component
         $makanan->update([
             'jenis_makanan' => $this->jenis_makanan,
             'jumlah_makanan' => $this->jumlah_makanan ?: null,
+            'satuan' => $this->satuan,
             'nama_donatur' => $this->nama_donatur,
             'tanggal' => $this->tanggal,
             'status' => $this->status,

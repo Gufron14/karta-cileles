@@ -15,6 +15,7 @@ class PenyaluranDonasi extends Model
         'uang_keluar',
         'alamat',
         'jml_kpl_keluarga',
+        'nama_kk',
         'keterangan',
         'status'
     ];
@@ -31,6 +32,7 @@ class PenyaluranDonasi extends Model
     protected $casts = [
         'tanggal' => 'date',
         'uang_keluar' => 'decimal:2',
+        'nama_kk' => 'array'
     ];
 
     // Accessor untuk format uang keluar

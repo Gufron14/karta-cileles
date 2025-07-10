@@ -19,8 +19,10 @@ class Donasi extends Component
     public $bukti_transfer;
     public $catatan = '';
     public $showSuccess = false;
+    public $kode_transaksi;
 
     protected $rules = [
+        'kode_transaksi' => 'nullable',
         'nama_donatur' => 'required|min:3|max:255',
         'email' => 'required|email|max:255',
         'no_hp' => 'required|numeric|digits_between:10,15',
@@ -59,8 +61,14 @@ class Donasi extends Component
             // Upload file bukti transfer
             $buktiTransferPath = $this->bukti_transfer->store('bukti-transfer', 'public');
 
+            $tanggal = date('dmY');
+            $lastDonasi = DonasiModel::whereDate('created_at', today())->count();
+            $nomorUrut = str_pad($lastDonasi + 1, 4, '0', STR_PAD_LEFT);
+            $kodeTransaksi = 'DNS' . $tanggal . $nomorUrut;
+
             // Simpan data donasi
             DonasiModel::create([
+                'kode_transaksi' => $kodeTransaksi,
                 'nama_donatur' => $this->nama_donatur,
                 'email' => $this->email,
                 'no_hp' => $this->no_hp,
@@ -70,14 +78,12 @@ class Donasi extends Component
                 'status' => 'pending', // default status
             ]);
 
+            
+
             // Reset form
             $this->reset(['nama_donatur', 'email', 'no_hp', 'nominal', 'bukti_transfer', 'catatan']);
             
-            // Show success message
-            $this->showSuccess = true;
-            
-            // Hide success message after 5 seconds
-            $this->dispatch('hide-success-alert');
+            return redirect()->route('donatur')->with('success', "Donasi berhasil! Kode Transaksi Anda: $kodeTransaksi");
 
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat menyimpan donasi. Silakan coba lagi.');
