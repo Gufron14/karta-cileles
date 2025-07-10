@@ -55,7 +55,7 @@
                                 <th>Tanggal</th>
                                 <th>Nama Donatur</th>
                                 <th>Jenis Makanan</th>
-                                {{-- <th>Jumlah</th> --}}
+                                <th>Jumlah</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -66,7 +66,7 @@
                                     <td>{{ \Carbon\Carbon::parse($makanan->tanggal)->format('d/m/Y') }}</td>
                                     <td class="text-start">{{ $makanan->nama_donatur }}</td>
                                     <td>{{ $makanan->jenis_makanan }}</td>
-                                    {{-- <td>{{ $makanan->jumlah_makanan }}</td> --}}
+                                    <td>{{ $makanan->jumlah_makanan }}{{ $makanan->satuan }}</td>
                                     <td>
                                         @if ($makanan->status == 'terverifikasi')
                                             <span class="badge bg-success">Terverifikasi</span>
@@ -133,7 +133,7 @@
                                 <th>No.</th>
                                 <th>Tanggal</th>
                                 <th>Alamat</th>
-                                {{-- <th>Jumlah Makanan</th> --}}
+                                {{-- <th>Jumlah</th> --}}
                                 <th>Jumlah KK</th>
                                 <th>Nama-nama Kpl. Keluarga</th>
                                 <th>Status</th>
@@ -147,7 +147,7 @@
                                     <td class="text-start">{{ $penyaluran->alamat }}</td>
 
                                     </td>
-                                    {{-- <td>{{ $penyaluran->jumlah }}</td> --}}
+                                    {{-- <td>{{ $penyaluran->jumlah }} {{ $penyaluran->satuan }}</td> --}}
                                     <td>{{ $penyaluran->jml_kk }}</td>
                                     <td>
                                         @if ($penyaluran->nama_kk)

@@ -84,18 +84,14 @@
                         <span class="text-danger">Donasi Tersalurkan</span>
                     </div>
 
-                    {{-- <div class="col">
+                    <div class="col">
                         <h4 class="fw-bold">
-                            {{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}</h4>
+                            {{ \App\Models\Makanan::where('status', 'terverifikasi')->sum('jumlah_makanan') }}kg </h4>
                         <span>Makanan Terkumpul</span>
-                    </div> --}}
+                    </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    {{-- <div class="col">
-                        <h4 class="fw-bold">
-                            {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}</h4>
-                        <span>Pakaian Terkumpul</span>
-                    </div> --}}
+
 
                     {{-- <div class="col">
                         <h4 class="fw-bold">
@@ -106,13 +102,19 @@
 
                     <div class="col">
                         <h4 class="fw-bold">
-                            {{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}</h4>
+                            {{ \App\Models\PenyaluranMakanan::where('status', 'disalurkan')->sum('jumlah') }}kg</h4>
                         <span>Makanan Tersalurkan</span>
                     </div>
                     |
                     <div class="col">
                         <h4 class="fw-bold">
-                            {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->sum(\DB::raw('p_laki + p_perempuan + p_anak')) }}
+                            {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}pcs</h4>
+                        <span>Pakaian Terkumpul</span>
+                    </div>
+                    |
+                    <div class="col">
+                        <h4 class="fw-bold">
+                            {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->sum(\DB::raw('p_laki + p_perempuan + p_anak')) }}pcs
                         </h4>
                         <span>Pakaian Tersalurkan</span>
                     </div>
