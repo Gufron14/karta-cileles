@@ -75,8 +75,19 @@
                                     <td>{{ $pakaians->firstItem() + $index }}</td>
                                     <td>{{ \Carbon\Carbon::parse($pakaian->tanggal)->format('d/m/Y') }}</td>
                                     <td class="text-start">{{ $pakaian->nama_donatur }}</td>
-                                    <td>{{ $pakaian->jenis_pakaian }}</td>
-                                    <td>{{ $pakaian->jumlah_pakaian }}</td>
+                                    <td>
+                                        @if ($pakaian->pakaian_data)
+                                            @foreach ($pakaian->pakaian_data as $data)
+                                                <small class="badge bg-light text-dark me-1">
+                                                    {{ $data['jenis'] }} ({{ $data['ukuran'] }} - {{ $data['jumlah'] }}
+                                                    pcs)
+                                                </small>
+                                            @endforeach
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td>{{ $pakaian->total_jumlah }} pcs</td>
                                     <td>
                                         @if ($pakaian->status == 'terverifikasi')
                                             <span class="badge bg-success">Terverifikasi</span>
@@ -168,10 +179,22 @@
                                 <tr class="text-center">
                                     <td>{{ $penyalurans->firstItem() + $index }}</td>
                                     <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
-                                    <td>{{ $penyaluran->p_laki }}</td>
-                                    <td>{{ $penyaluran->p_perempuan }}</td>
-                                    <td>{{ $penyaluran->p_anak }}</td>
-                                    <td>{{ $penyaluran->p_laki + $penyaluran->p_perempuan + $penyaluran->p_anak }}</td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'laki-laki') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'perempuan') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'anak') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>{{ $penyaluran->total_pakaian }}</td>
                                     <td>
                                         @if ($penyaluran->status == 'disalurkan')
                                             <span class="badge bg-success">Disalurkan</span>

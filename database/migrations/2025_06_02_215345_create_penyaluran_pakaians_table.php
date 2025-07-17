@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('penyaluran_pakaians', function (Blueprint $table) {
             $table->id();
-            $table->integer('p_laki');
-            $table->integer('p_perempuan');
-            $table->integer('p_anak');
+            $table->json('pakaian_data');
             $table->date('tanggal');
             $table->enum('status', ['pending', 'disalurkan']);
             $table->timestamps();

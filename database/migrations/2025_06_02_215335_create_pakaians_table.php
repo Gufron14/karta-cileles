@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('pakaians', function (Blueprint $table) {
             $table->id();
-            $table->string('jenis_pakaian');
-            $table->integer('jumlah_pakaian');
+            $table->json('pakaian_data');
             $table->string('nama_donatur');
             $table->date('tanggal');
             $table->enum('status', ['pending', 'terverifikasi'])->default('pending');

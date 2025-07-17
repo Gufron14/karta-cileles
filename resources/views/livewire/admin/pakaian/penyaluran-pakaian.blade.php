@@ -78,10 +78,22 @@
                             <tr class="text-center">
                                 <td>{{ $penyalurans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
-                                <td>{{ $penyaluran->p_laki }}</td>
-                                <td>{{ $penyaluran->p_perempuan }}</td>
-                                <td>{{ $penyaluran->p_anak }}</td>
-                                <td>{{ $penyaluran->p_laki + $penyaluran->p_perempuan + $penyaluran->p_anak }}</td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'laki-laki') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'perempuan') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'anak') as $item)
+                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </td>
+                                <td>{{ $penyaluran->total_pakaian }}</td>
                                 <td>
                                     @if ($penyaluran->status == 'disalurkan')
                                         <span class="badge bg-success">Disalurkan</span>
@@ -91,7 +103,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @if ($penyaluran->status == 'pending')                                            
+                                        @if ($penyaluran->status == 'pending')
                                             <button class="btn btn-sm btn-success"
                                                 wire:click="updateStatus({{ $penyaluran->id }})" title="Ubah Status"
                                                 wire:confirm="Apakah Anda yakin ingin mengubah status penyaluran ini?">
@@ -133,7 +145,7 @@
         {{-- Modal Tambah --}}
         <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="tambahModalLabel" aria-hidden="true"
             wire:ignore.self>
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="tambahModalLabel">Tambah Data Penyaluran Pakaian</h1>
@@ -142,40 +154,75 @@
                     <form wire:submit.prevent="store">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="p_laki" class="form-label">Pakaian Laki-laki</label>
-                                <input type="number" class="form-control @error('p_laki') is-invalid @enderror"
-                                    wire:model="p_laki" placeholder="Jumlah pakaian laki-laki" min="0"
-                                    value="0">
-                                @error('p_laki')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="p_perempuan" class="form-label">Pakaian Perempuan</label>
-                                <input type="number" class="form-control @error('p_perempuan') is-invalid @enderror"
-                                    wire:model="p_perempuan" placeholder="Jumlah pakaian perempuan" min="0"
-                                    value="0">
-                                @error('p_perempuan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="p_anak" class="form-label">Pakaian Anak</label>
-                                <input type="number" class="form-control @error('p_anak') is-invalid @enderror"
-                                    wire:model="p_anak" placeholder="Jumlah pakaian anak" min="0"
-                                    value="0">
-                                @error('p_anak')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="tanggal" class="form-label">Tanggal Penyaluran</label>
+                                <label for="tanggal" class="form-label">Tanggal Penyaluran <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
                                     wire:model="tanggal">
                                 @error('tanggal')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Data Pakaian <span class="text-danger">*</span></label>
+                                @error('pakaian_data')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                                
+                                @foreach($pakaian_data as $index => $data)
+                                    <div class="border rounded p-3 mb-3 bg-light">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Pakaian {{ $index + 1 }}</h6>
+                                            @if(count($pakaian_data) > 1)
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    wire:click="removePakaianData({{ $index }})">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            @endif
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jenis Pakaian</label>
+                                                <select class="form-select @error('pakaian_data.'.$index.'.jenis') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.jenis">
+                                                    <option value="">Pilih Jenis</option>
+                                                    <option value="laki-laki">Laki-laki</option>
+                                                    <option value="perempuan">Perempuan</option>
+                                                    <option value="anak">Anak</option>
+                                                </select>
+                                                @error('pakaian_data.'.$index.'.jenis')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jumlah</label>
+                                                <input type="number" 
+                                                    class="form-control @error('pakaian_data.'.$index.'.jumlah') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.jumlah" 
+                                                    placeholder="Jumlah" min="1">
+                                                @error('pakaian_data.'.$index.'.jumlah')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Ukuran</label>
+                                                <input type="text" 
+                                                    class="form-control @error('pakaian_data.'.$index.'.ukuran') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.ukuran" 
+                                                    placeholder="e.g., M, L, XL">
+                                                @error('pakaian_data.'.$index.'.ukuran')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <button type="button" class="btn btn-sm btn-outline-primary" wire:click="addPakaianData">
+                                    <i class="fas fa-plus me-1"></i>Tambah Data Pakaian
+                                </button>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
@@ -199,49 +246,86 @@
         {{-- Modal Edit --}}
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true"
             wire:ignore.self>
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="editModalLabel">Edit Data Penyaluran Pakaian</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form wire:submit.prevent="update">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="edit_p_laki" class="form-label">Pakaian Laki-laki</label>
-                                <input type="number" class="form-control @error('p_laki') is-invalid @enderror"
-                                    wire:model="p_laki" placeholder="Jumlah pakaian laki-laki" min="0">
-                                @error('p_laki')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_p_perempuan" class="form-label">Pakaian Perempuan</label>
-                                <input type="number" class="form-control @error('p_perempuan') is-invalid @enderror"
-                                    wire:model="p_perempuan" placeholder="Jumlah pakaian perempuan" min="0">
-                                @error('p_perempuan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_p_anak" class="form-label">Pakaian Anak</label>
-                                <input type="number" class="form-control @error('p_anak') is-invalid @enderror"
-                                    wire:model="p_anak" placeholder="Jumlah pakaian anak" min="0">
-                                @error('p_anak')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_tanggal" class="form-label">Tanggal Penyaluran</label>
+                                <label for="edit_tanggal" class="form-label">Tanggal Penyaluran <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
                                     wire:model="tanggal">
                                 @error('tanggal')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3">
-                                <label for="edit_status" class="form-label">Status</label>
+                                <label class="form-label">Data Pakaian <span class="text-danger">*</span></label>
+                                @error('pakaian_data')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                                
+                                @foreach($pakaian_data as $index => $data)
+                                    <div class="border rounded p-3 mb-3 bg-light">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Pakaian {{ $index + 1 }}</h6>
+                                            @if(count($pakaian_data) > 1)
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    wire:click="removePakaianData({{ $index }})">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            @endif
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jenis Pakaian</label>
+                                                <select class="form-select @error('pakaian_data.'.$index.'.jenis') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.jenis">
+                                                    <option value="">Pilih Jenis</option>
+                                                    <option value="laki-laki">Laki-laki</option>
+                                                    <option value="perempuan">Perempuan</option>
+                                                    <option value="anak">Anak</option>
+                                                </select>
+                                                @error('pakaian_data.'.$index.'.jenis')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jumlah</label>
+                                                <input type="number" 
+                                                    class="form-control @error('pakaian_data.'.$index.'.jumlah') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.jumlah" 
+                                                    placeholder="Jumlah" min="1">
+                                                @error('pakaian_data.'.$index.'.jumlah')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Ukuran</label>
+                                                <input type="text" 
+                                                    class="form-control @error('pakaian_data.'.$index.'.ukuran') is-invalid @enderror"
+                                                    wire:model="pakaian_data.{{ $index }}.ukuran" 
+                                                    placeholder="e.g., M, L, XL">
+                                                @error('pakaian_data.'.$index.'.ukuran')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <button type="button" class="btn btn-sm btn-outline-primary" wire:click="addPakaianData">
+                                    <i class="fas fa-plus me-1"></i>Tambah Data Pakaian
+                                </button>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
                                 <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
                                     <option value="pending">Pending</option>
                                     <option value="disalurkan">Disalurkan</option>
@@ -274,24 +358,43 @@
                         @if ($detailData)
                             <div class="row">
                                 <div class="col-5"><strong>Pakaian Laki-laki:</strong></div>
-                                <div class="col-7">{{ $detailData->p_laki }} pcs</div>
+                                <div class="col-7">
+                                    @forelse(collect($detailData->pakaian_data)->where('jenis', 'laki-laki') as $item)
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @empty
+                                        0 pcs
+                                    @endforelse
+                                </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-5"><strong>Pakaian Perempuan:</strong></div>
-                                <div class="col-7">{{ $detailData->p_perempuan }} pcs</div>
+                                <div class="col-7">
+                                    @forelse(collect($detailData->pakaian_data)->where('jenis', 'perempuan') as $item)
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @empty
+                                        0 pcs
+                                    @endforelse
+                                </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-5"><strong>Pakaian Anak:</strong></div>
-                                <div class="col-7">{{ $detailData->p_anak }} pcs</div>
+                                <div class="col-7">
+                                    @forelse(collect($detailData->pakaian_data)->where('jenis', 'anak') as $item)
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                    @empty
+                                        0 pcs
+                                    @endforelse
+                                </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-5"><strong>Total Pakaian:</strong></div>
                                 <div class="col-7">
                                     <strong>{{ $detailData->p_laki + $detailData->p_perempuan + $detailData->p_anak }}
-                                        pcs</strong></div>
+                                        pcs</strong>
+                                </div>
                             </div>
                             <hr>
                             <div class="row">

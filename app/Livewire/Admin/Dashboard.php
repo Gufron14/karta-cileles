@@ -50,9 +50,13 @@ class Dashboard extends Component
         $this->totalDonasiTersedia = $this->totalDonasiTerkumpul - $this->totalDonasiDisalurkan;
 
         // Total pakaian terkumpul
-        $this->totalPakaianTerkumpul = Pakaian::where('status', 'terverifikasi')
-            ->orWhere('status', 'terverifikasi')
-            ->sum('jumlah_pakaian');
+$this->totalPakaianTerkumpul = Pakaian::where('status', 'terverifikasi')
+    ->get()
+    ->flatMap(function ($pakaian) {
+        return $pakaian->pakaian_data;
+    })
+    ->sum('jumlah');
+
 
         // Total pakaian disalurkan
         $pakaianDisalurkan = PenyaluranPakaian::where('status', 'disalurkan')

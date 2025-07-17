@@ -20,9 +20,7 @@ class PenyaluranPakaian extends Component
     public $tahunFilter = '';
 
     // Properties untuk form
-    public $p_laki = '';
-    public $p_perempuan = '';
-    public $p_anak = '';
+    public $pakaian_data = [];
     public $tanggal = '';
     public $status = 'pending';
 
@@ -36,20 +34,20 @@ class PenyaluranPakaian extends Component
     protected $paginationTheme = 'bootstrap';
 
     protected $rules = [
-        'p_laki' => 'required|integer|min:0',
-        'p_perempuan' => 'required|integer|min:0',
-        'p_anak' => 'required|integer|min:0',
+        'pakaian_data' => 'required|array|min:1',
+        'pakaian_data.*.jenis' => 'required|in:laki-laki,perempuan,anak',
+        'pakaian_data.*.jumlah' => 'required|integer|min:1',
+        'pakaian_data.*.ukuran' => 'required|string|max:10',
         'tanggal' => 'required|date',
         'status' => 'required|in:pending,disalurkan',
     ];
 
     protected $messages = [
-        'p_laki.required' => 'Jumlah pakaian laki-laki harus diisi',
-        'p_laki.min' => 'Jumlah pakaian laki-laki minimal 0',
-        'p_perempuan.required' => 'Jumlah pakaian perempuan harus diisi',
-        'p_perempuan.min' => 'Jumlah pakaian perempuan minimal 0',
-        'p_anak.required' => 'Jumlah pakaian anak harus diisi',
-        'p_anak.min' => 'Jumlah pakaian anak minimal 0',
+        'pakaian_data.required' => 'Data pakaian harus diisi',
+        'pakaian_data.*.jenis.required' => 'Jenis pakaian harus dipilih',
+        'pakaian_data.*.jumlah.required' => 'Jumlah pakaian harus diisi',
+        'pakaian_data.*.jumlah.min' => 'Jumlah pakaian minimal 1',
+        'pakaian_data.*.ukuran.required' => 'Ukuran pakaian harus diisi',
         'tanggal.required' => 'Tanggal harus diisi',
         'tanggal.date' => 'Format tanggal tidak valid',
     ];
@@ -58,6 +56,35 @@ class PenyaluranPakaian extends Component
     {
         $this->tanggal = date('Y-m-d');
         $this->tahunFilter = date('Y');
+        $this->resetPakaianData();
+    }
+
+    public function resetPakaianData()
+    {
+        $this->pakaian_data = [
+            [
+                'jenis' => '',
+                'jumlah' => '',
+                'ukuran' => ''
+            ]
+        ];
+    }
+
+    public function addPakaianData()
+    {
+        $this->pakaian_data[] = [
+            'jenis' => '',
+            'jumlah' => '',
+            'ukuran' => ''
+        ];
+    }
+
+    public function removePakaianData($index)
+    {
+        if (count($this->pakaian_data) > 1) {
+            unset($this->pakaian_data[$index]);
+            $this->pakaian_data = array_values($this->pakaian_data);
+        }
     }
 
     public function updatingSearch()
@@ -91,9 +118,10 @@ class PenyaluranPakaian extends Component
 
     public function resetForm()
     {
-        $this->reset(['p_laki', 'p_perempuan', 'p_anak', 'tanggal', 'status', 'editingId', 'isEditing']);
+        $this->reset(['tanggal', 'status', 'editingId', 'isEditing']);
         $this->tanggal = date('Y-m-d');
         $this->status = 'pending';
+        $this->resetPakaianData();
         $this->resetValidation();
     }
 
@@ -101,16 +129,18 @@ class PenyaluranPakaian extends Component
     {
         $this->validate();
 
-        // Validasi minimal salah satu harus diisi
-        if ($this->p_laki == 0 && $this->p_perempuan == 0 && $this->p_anak == 0) {
-            $this->addError('p_laki', 'Minimal salah satu kategori pakaian harus diisi');
+        // Filter data pakaian yang kosong
+        $pakaianData = array_filter($this->pakaian_data, function($item) {
+            return !empty($item['jenis']) && !empty($item['jumlah']) && !empty($item['ukuran']);
+        });
+
+        if (empty($pakaianData)) {
+            $this->addError('pakaian_data', 'Minimal harus ada satu data pakaian yang lengkap');
             return;
         }
 
         ModelsPenyaluranPakaian::create([
-            'p_laki' => $this->p_laki,
-            'p_perempuan' => $this->p_perempuan,
-            'p_anak' => $this->p_anak,
+            'pakaian_data' => array_values($pakaianData),
             'tanggal' => $this->tanggal,
             'status' => $this->status,
         ]);
@@ -126,9 +156,7 @@ class PenyaluranPakaian extends Component
 
         $this->editingId = $id;
         $this->isEditing = true;
-        $this->p_laki = $penyaluran->p_laki;
-        $this->p_perempuan = $penyaluran->p_perempuan;
-        $this->p_anak = $penyaluran->p_anak;
+        $this->pakaian_data = $penyaluran->pakaian_data;
         $this->tanggal = $penyaluran->tanggal;
         $this->status = $penyaluran->status;
 
@@ -139,17 +167,19 @@ class PenyaluranPakaian extends Component
     {
         $this->validate();
 
-        // Validasi minimal salah satu harus diisi
-        if ($this->p_laki == 0 && $this->p_perempuan == 0 && $this->p_anak == 0) {
-            $this->addError('p_laki', 'Minimal salah satu kategori pakaian harus diisi');
+        // Filter data pakaian yang kosong
+        $pakaianData = array_filter($this->pakaian_data, function($item) {
+            return !empty($item['jenis']) && !empty($item['jumlah']) && !empty($item['ukuran']);
+        });
+
+        if (empty($pakaianData)) {
+            $this->addError('pakaian_data', 'Minimal harus ada satu data pakaian yang lengkap');
             return;
         }
 
         $penyaluran = ModelsPenyaluranPakaian::findOrFail($this->editingId);
         $penyaluran->update([
-            'p_laki' => $this->p_laki,
-            'p_perempuan' => $this->p_perempuan,
-            'p_anak' => $this->p_anak,
+            'pakaian_data' => array_values($pakaianData),
             'tanggal' => $this->tanggal,
             'status' => $this->status,
         ]);

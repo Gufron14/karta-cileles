@@ -21,11 +21,10 @@ class Index extends Component
     public $tahunFilter = '';
 
     // Properties untuk form
-    public $jenis_pakaian = '';
-    public $jumlah_pakaian = '';
     public $nama_donatur = '';
     public $tanggal = '';
     public $status = 'pending';
+    public $pakaian_data = [];
 
     // Properties untuk edit
     public $editingId = null;
@@ -36,28 +35,35 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-
     protected $rules = [
-        'jenis_pakaian' => 'required|string|max:255',
-        'jumlah_pakaian' => 'required|integer|min:1',
         'nama_donatur' => 'required|string|max:255',
         'tanggal' => 'required|date',
-        'status' => 'required|in:pending,terverifikasi'
+        'status' => 'required|in:pending,terverifikasi',
+        'pakaian_data' => 'required|array|min:1',
+        'pakaian_data.*.jenis' => 'required|string',
+        'pakaian_data.*.jumlah' => 'required|integer|min:1',
+        'pakaian_data.*.ukuran' => 'required|string',
     ];
 
     protected $messages = [
-        'jenis_pakaian.required' => 'Jenis pakaian harus diisi',
-        'jumlah_pakaian.required' => 'Jumlah pakaian harus diisi',
-        'jumlah_pakaian.min' => 'Jumlah pakaian minimal 1',
         'nama_donatur.required' => 'Nama donatur harus diisi',
         'tanggal.required' => 'Tanggal harus diisi',
-        'tanggal.date' => 'Format tanggal tidak valid'
+        'tanggal.date' => 'Format tanggal tidak valid',
+        'pakaian_data.required' => 'Data pakaian harus diisi',
+        'pakaian_data.min' => 'Minimal harus ada 1 data pakaian',
+        'pakaian_data.*.jenis.required' => 'Jenis pakaian harus dipilih',
+        'pakaian_data.*.jumlah.required' => 'Jumlah pakaian harus diisi',
+        'pakaian_data.*.jumlah.min' => 'Jumlah pakaian minimal 1',
+        'pakaian_data.*.ukuran.required' => 'Ukuran pakaian harus dipilih',
     ];
 
     public function mount()
     {
         $this->tanggal = date('Y-m-d');
         $this->tahunFilter = date('Y');
+        $this->pakaian_data = [
+            ['jenis' => '', 'jumlah' => '', 'ukuran' => '']
+        ];
     }
 
     public function updatingSearch()
@@ -91,26 +97,46 @@ class Index extends Component
 
     public function resetForm()
     {
-        $this->reset(['jenis_pakaian', 'jumlah_pakaian', 'nama_donatur', 'tanggal', 'status', 'editingId', 'isEditing']);
+        $this->reset(['nama_donatur', 'tanggal', 'status', 'pakaian_data', 'editingId', 'isEditing']);
         $this->tanggal = date('Y-m-d');
         $this->status = 'pending';
+        $this->pakaian_data = [
+            ['jenis' => '', 'jumlah' => '', 'ukuran' => '']
+        ];
         $this->resetValidation();
+    }
+
+    public function addPakaianData()
+    {
+        $this->pakaian_data[] = ['jenis' => '', 'jumlah' => '', 'ukuran' => ''];
+    }
+
+    public function removePakaianData($index)
+    {
+        if (count($this->pakaian_data) > 1) {
+            unset($this->pakaian_data[$index]);
+            $this->pakaian_data = array_values($this->pakaian_data);
+        }
     }
 
     public function store()
     {
         $this->validate();
 
+        // Filter data pakaian yang kosong
+        $pakaianData = array_filter($this->pakaian_data, function($item) {
+            return !empty($item['jenis']) && !empty($item['jumlah']) && !empty($item['ukuran']);
+        });
+
         Pakaian::create([
-            'jenis_pakaian' => $this->jenis_pakaian,
-            'jumlah_pakaian' => $this->jumlah_pakaian,
+            'pakaian_data' => array_values($pakaianData),
             'nama_donatur' => $this->nama_donatur,
             'tanggal' => $this->tanggal,
             'status' => $this->status
         ]);
 
         $this->resetForm();
-        $this->dispatch('close-modal', 'tambahModal');
+        $this->dispatch('close-modal', 'pakaianModal');
         session()->flash('success', 'Data pakaian berhasil ditambahkan!');
     }
 
@@ -120,30 +146,33 @@ class Index extends Component
         
         $this->editingId = $id;
         $this->isEditing = true;
-        $this->jenis_pakaian = $pakaian->jenis_pakaian;
-        $this->jumlah_pakaian = $pakaian->jumlah_pakaian;
         $this->nama_donatur = $pakaian->nama_donatur;
-        $this->tanggal = $pakaian->tanggal;
+        $this->tanggal = $pakaian->tanggal->format('Y-m-d');
         $this->status = $pakaian->status;
+        $this->pakaian_data = $pakaian->pakaian_data ?: [['jenis' => '', 'jumlah' => '', 'ukuran' => '']];
 
-        $this->dispatch('open-modal', 'editModal');
+        $this->dispatch('open-modal', 'pakaianModal');
     }
 
     public function update()
     {
         $this->validate();
 
+        // Filter data pakaian yang kosong
+        $pakaianData = array_filter($this->pakaian_data, function($item) {
+            return !empty($item['jenis']) && !empty($item['jumlah']) && !empty($item['ukuran']);
+        });
+
         $pakaian = Pakaian::findOrFail($this->editingId);
         $pakaian->update([
-            'jenis_pakaian' => $this->jenis_pakaian,
-            'jumlah_pakaian' => $this->jumlah_pakaian,
+            'pakaian_data' => array_values($pakaianData),
             'nama_donatur' => $this->nama_donatur,
             'tanggal' => $this->tanggal,
             'status' => $this->status
         ]);
 
         $this->resetForm();
-        $this->dispatch('close-modal', 'editModal');
+        $this->dispatch('close-modal', 'pakaianModal');
         session()->flash('success', 'Data pakaian berhasil diperbarui!');
     }
 
@@ -174,8 +203,7 @@ class Index extends Component
         // Filter berdasarkan pencarian
         if ($this->search) {
             $query->where(function($q) {
-                $q->where('nama_donatur', 'like', '%' . $this->search . '%')
-                  ->orWhere('jenis_pakaian', 'like', '%' . $this->search . '%');
+                $q->where('nama_donatur', 'like', '%' . $this->search . '%');
             });
         }
 

@@ -108,13 +108,17 @@
                     |
                     <div class="col">
                         <h4 class="fw-bold">
-                            {{ \App\Models\Pakaian::where('status', 'terverifikasi')->sum('jumlah_pakaian') }}pcs</h4>
+                            {{ \App\Models\Pakaian::where('status', 'terverifikasi')->get()->flatMap(fn($p) => $p->pakaian_data)->sum('jumlah') }}pcs
+                        </h4>
                         <span>Pakaian Terkumpul</span>
                     </div>
                     |
                     <div class="col">
                         <h4 class="fw-bold">
-                            {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->sum(\DB::raw('p_laki + p_perempuan + p_anak')) }}pcs
+                            {{ \App\Models\PenyaluranPakaian::where('status', 'disalurkan')->get()->sum(function($item) {
+    return collect($item->pakaian_data)->sum('jumlah');
+}) }} pcs
+
                         </h4>
                         <span>Pakaian Tersalurkan</span>
                     </div>
