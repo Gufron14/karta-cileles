@@ -181,20 +181,20 @@
                                     <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
                                 <td>
                                     @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'laki-laki') as $item)
-                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'perempuan') as $item)
-                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach(collect($penyaluran->pakaian_data)->where('jenis', 'anak') as $item)
-                                        {{ $item['jumlah'] }} ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
+                                        {{ $item['jumlah'] }} pcs ({{ $item['ukuran'] }}){{ !$loop->last ? ', ' : '' }}
                                     @endforeach
                                 </td>
-                                <td>{{ $penyaluran->total_pakaian }}</td>
+                                <td>{{ $penyaluran->total_pakaian }} pcs</td>
                                     <td>
                                         @if ($penyaluran->status == 'disalurkan')
                                             <span class="badge bg-success">Disalurkan</span>
