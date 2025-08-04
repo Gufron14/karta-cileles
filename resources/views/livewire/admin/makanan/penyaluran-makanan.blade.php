@@ -150,7 +150,7 @@
                     <form wire:submit.prevent="store">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="jumlah" class="form-label">Jumlah Makanan (porsi)</label>
+                                <label for="jumlah" class="form-label">Jumlah Makanan</label>
                                 <input type="number" class="form-control @error('jumlah') is-invalid @enderror"
                                     wire:model="jumlah" placeholder="Jumlah makanan dalam porsi" min="1">
                                 @error('jumlah')
@@ -176,7 +176,7 @@
                             <div class="mb-3">
                                 <label for="nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
                                 <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
-                                    placeholder="Nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
+                                    placeholder="masukan nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
                                 @error('nama_kk')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

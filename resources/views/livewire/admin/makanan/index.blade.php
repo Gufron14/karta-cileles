@@ -150,8 +150,18 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="jenis_makanan" class="form-label">Jenis Sembako</label>
-                                <input type="text" class="form-control @error('jenis_makanan') is-invalid @enderror" wire:model="jenis_makanan"
-                                placeholder="Makanan pokok, makanan ringan, minuman, DLL)">
+                                <select class="form-select @error('jenis_makanan') is-invalid @enderror" wire:model="jenis_makanan">
+                                    <option value="" selected>-- Pilih -- </option>
+                                    <option value="Beras">Beras</option>
+                                    <option value="Gula Pasir">Gula Pasir</option>
+                                    <option value="Minyak Goreng">Minyak Goreng</option>
+                                    <option value="Tepung Terigu">Tepung Terigu</option>
+                                    <option value="Daging Sapi/Ayam">Daging Sapi/Ayam</option>
+                                    <option value="Telur Ayam">Telur Ayam</option>
+                                    <option value="Susu">Susu</option>
+                                    <option value="Garam">Garam</option>
+                                    <option value="Gas Elpiji"></option>
+                                </select>
                                 @error('jenis_makanan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
