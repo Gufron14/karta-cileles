@@ -33,10 +33,11 @@
                         <div class="mb-3">
                             <label for="jml_kk" class="form-label">Jumlah Kepala Keluarga (KK) <span class="text-danger">*</span></label>
                             <input type="number" class="form-control @error('jml_kk') is-invalid @enderror"
-                                wire:model="jml_kk" placeholder="Jumlah KK yang menerima" min="1">
+                                wire:model.live="jml_kk" placeholder="Jumlah KK yang menerima" min="1">
                             @error('jml_kk')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="form-text">Field nama dan nomor KK akan muncul sesuai jumlah yang dimasukkan</div>
                         </div>
                     </div>
                 </div>
@@ -53,9 +54,21 @@
                 <div class="mb-3">
                     <label class="form-label">Data Kepala Keluarga <span class="text-danger">*</span></label>
                     <div class="border rounded p-3">
+                        @if($jml_kk > 0)
+                            <div class="alert alert-info alert-sm mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Menampilkan {{ count($kk_data) }} dari {{ $jml_kk }} field KK yang dibutuhkan
+                            </div>
+                        @endif
+                        
                         @foreach($kk_data as $index => $kk)
                             <div class="row mb-2" wire:key="kk-{{ $index }}">
-                                <div class="col-md-5">
+                                <div class="col-md-1">
+                                    <div class="form-control-plaintext text-center">
+                                        <strong>{{ $index + 1 }}.</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <input type="text" class="form-control @error('kk_data.'.$index.'.nama_kk') is-invalid @enderror"
                                         wire:model="kk_data.{{ $index }}.nama_kk" 
                                         placeholder="Nama Kepala Keluarga">
@@ -63,38 +76,28 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-5">
-                                    <input type="text" class="form-control @error('kk_data.'.$index.'.nomor_kk') is-invalid @enderror"
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control @error('kk_data.'.$index.'.nomor_kk') is-invalid @enderror"
                                         wire:model="kk_data.{{ $index }}.nomor_kk" 
                                         placeholder="Nomor KK">
                                     @error('kk_data.'.$index.'.nomor_kk')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-2">
-                                    @if($index === 0)
-                                        <button type="button" class="btn btn-success btn-sm" wire:click="addKK">
+                                <div class="col-md-3">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-success btn-sm" wire:click="addKK" title="Tambah KK">
                                             <i class="fas fa-plus"></i>
                                         </button>
-                                    @else
-                                        <button type="button" class="btn btn-danger btn-sm" wire:click="removeKK({{ $index }})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    @endif
+                                        @if(count($kk_data) > 1)
+                                            <button type="button" class="btn btn-danger btn-sm" wire:click="removeKK({{ $index }})" title="Hapus KK">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
-                        
-                        @if(count($kk_data) > 1)
-                            <div class="row">
-                                <div class="col-md-10"></div>
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-success btn-sm" wire:click="addKK">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
 

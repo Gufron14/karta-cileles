@@ -22,6 +22,7 @@ class Donasi extends Component
     public $filterTahunDonasi = '';
     public $filterStatusDonasi = '';
     public $nama_kk = '';
+    public $nomor_kk = '';
     
     public $searchPenyaluran = '';
     public $filterBulanPenyaluran = '';
@@ -41,6 +42,11 @@ class Donasi extends Component
 
     // Modal Penyaluran properties
     public $showModalPenyaluran = false;
+    
+    public function createPenyaluranPage()
+    {
+        return redirect()->route('admin.penyaluran-donasi.create');
+    }
     public $penyaluranId = null;
     public $tanggal = '';
     public $uang_keluar = '';
@@ -57,7 +63,7 @@ class Donasi extends Component
     public function mount()
     {
         $this->filterTahunDonasi = date('Y');
-        $this->filterTahunPenyaluran = date('Y');
+        $this->filterTahunPenyaluran = '';
         $this->tanggal = date('Y-m-d');
     }
 
@@ -297,7 +303,7 @@ public function savePenyaluran()
     {
         $this->searchPenyaluran = '';
         $this->filterBulanPenyaluran = '';
-        $this->filterTahunPenyaluran = date('Y');
+        $this->filterTahunPenyaluran = '';
         $this->filterStatusPenyaluran = '';
         $this->resetPage();
     }

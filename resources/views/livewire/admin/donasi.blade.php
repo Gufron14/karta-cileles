@@ -160,7 +160,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Bantuan Tersalurkan</h5>
-            <button class="btn btn-sm btn-primary" wire:click="openModalPenyaluran">
+                <button class="btn btn-sm btn-primary" wire:click="createPenyaluranPage">
                 <i class="fas fa-plus me-1"></i>Tambah Data
             </button>
         </div>
@@ -233,13 +233,20 @@
                                 <td class="text-start">{{ Str::limit($penyaluran->alamat, 30) }}</td>
                                 <td>{{ $penyaluran->jml_kpl_keluarga }} KK</td>
                                 <td>
-                                    @if($penyaluran->nama_kk)
-                                    @foreach(json_decode($penyaluran->nama_kk) as $nama)
-                                        {{ $nama }},
-                                    @endforeach
-                                @else
-                                    <span class="text-muted">Tidak ada data</span>
-                                @endif
+                                    @php
+                                        $namaArr = json_decode($penyaluran->nama_kk, true) ?: [];
+                                        $nomorArr = json_decode($penyaluran->nomor_kk, true) ?: [];
+                                    @endphp
+                                    @if(!empty($namaArr) || !empty($nomorArr))
+                                        @for($i=0; $i < max(count($namaArr), count($nomorArr)); $i++)
+                                            <div>
+                                                <strong>{{ $namaArr[$i] ?? '-' }}</strong>
+                                                <small class="text-muted">(KK: {{ $nomorArr[$i] ?? '-' }})</small>
+                                            </div>
+                                        @endfor
+                                    @else
+                                        <span class="text-muted">Tidak ada data</span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($penyaluran->status == 'terverifikasi')
@@ -416,8 +423,7 @@
         </div>
     @endif
 
-    <!-- Modal Tambah/Edit Penyaluran -->
-    @if ($showModalPenyaluran)
+    <!-- Modal Tambah/Edit Penyaluran --@if (false)
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

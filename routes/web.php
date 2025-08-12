@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::get('dokumentasi-bencana', \App\Livewire\Admin\Bencana\DokumentasiBencana::class)->name('dokumentasi-bencana');
         Route::get('relawan', \App\Livewire\Admin\Relawan::class)->name('relawan');
         Route::get('data-donasi', \App\Livewire\Admin\Donasi::class)->name('data-donasi');
+        Route::get('penyaluran-donasi/create', \App\Livewire\Admin\CreatePenyaluranDonasi::class)->name('admin.penyaluran-donasi.create');
         Route::get('data-pakaian', \App\Livewire\Admin\Pakaian\Index::class)->name('data-pakaian');
         Route::get('penyaluran-pakaian', \App\Livewire\Admin\Pakaian\PenyaluranPakaian::class)->name('penyaluran-pakaian');
         Route::get('data-makanan', \App\Livewire\Admin\Makanan\Index::class)->name('data-makanan');

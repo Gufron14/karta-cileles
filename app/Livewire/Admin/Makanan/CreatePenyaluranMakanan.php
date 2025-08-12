@@ -30,7 +30,7 @@ class CreatePenyaluranMakanan extends Component
         'tanggal' => 'required|date',
         'status' => 'required|in:pending,disalurkan',
         'kk_data.*.nama_kk' => 'required|string|max:255',
-        'kk_data.*.nomor_kk' => 'required|string|max:20',
+        'kk_data.*.nomor_kk' => 'required|digits:16',
     ];
 
     protected $messages = [
@@ -49,7 +49,7 @@ class CreatePenyaluranMakanan extends Component
         'kk_data.*.nama_kk.required' => 'Nama KK harus diisi',
         'kk_data.*.nama_kk.max' => 'Nama KK maksimal 255 karakter',
         'kk_data.*.nomor_kk.required' => 'Nomor KK harus diisi',
-        'kk_data.*.nomor_kk.max' => 'Nomor KK maksimal 20 karakter',
+        'kk_data.*.nomor_kk.digits' => 'Nomor KK harus 16 digit',
     ];
 
     public function mount()
@@ -62,9 +62,36 @@ class CreatePenyaluranMakanan extends Component
         return view('livewire.admin.makanan.create-penyaluran-makanan');
     }
 
+    public function updatedJmlKk()
+    {
+        $this->updateKKFields();
+    }
+
+    public function updateKKFields()
+    {
+        $jml_kk = (int) $this->jml_kk;
+        
+        if ($jml_kk > 0) {
+            // If we need more fields, add them
+            while (count($this->kk_data) < $jml_kk) {
+                $this->kk_data[] = ['nama_kk' => '', 'nomor_kk' => ''];
+            }
+            
+            // If we have too many fields, remove the excess
+            while (count($this->kk_data) > $jml_kk) {
+                array_pop($this->kk_data);
+            }
+        } else {
+            // If jml_kk is 0 or empty, keep at least one field
+            $this->kk_data = [['nama_kk' => '', 'nomor_kk' => '']];
+        }
+    }
+
     public function addKK()
     {
         $this->kk_data[] = ['nama_kk' => '', 'nomor_kk' => ''];
+        // Update jml_kk to match the number of fields
+        $this->jml_kk = count($this->kk_data);
     }
 
     public function removeKK($index)
@@ -72,6 +99,8 @@ class CreatePenyaluranMakanan extends Component
         if (count($this->kk_data) > 1) {
             unset($this->kk_data[$index]);
             $this->kk_data = array_values($this->kk_data);
+            // Update jml_kk to match the number of fields
+            $this->jml_kk = count($this->kk_data);
         }
     }
 
@@ -94,11 +123,11 @@ class CreatePenyaluranMakanan extends Component
         ]);
 
         session()->flash('success', 'Data penyaluran makanan berhasil ditambahkan!');
-        return redirect()->route('admin.penyaluran-makanan');
+        return redirect()->route('penyaluran-makanan');
     }
 
     public function cancel()
     {
-        return redirect()->route('admin.penyaluran-makanan');
+        return redirect()->route('penyaluran-makanan');
     }
 }
