@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
         Route::get('penyaluran-pakaian', \App\Livewire\Admin\Pakaian\PenyaluranPakaian::class)->name('penyaluran-pakaian');
         Route::get('data-makanan', \App\Livewire\Admin\Makanan\Index::class)->name('data-makanan');
         Route::get('penyaluran-makanan', \App\Livewire\Admin\Makanan\PenyaluranMakanan::class)->name('penyaluran-makanan');
+        Route::get('penyaluran-makanan/create', \App\Livewire\Admin\Makanan\CreatePenyaluranMakanan::class)->name('admin.penyaluran-makanan.create');
+        Route::get('penyaluran-makanan/edit/{id}', \App\Livewire\Admin\Makanan\EditPenyaluranMakanan::class)->name('admin.penyaluran-makanan.edit');
         
         Route::get('kelola-berita', \App\Livewire\Admin\PortalBerita\Index::class)->name('kelola-berita');
         Route::get('tambah-berita', \App\Livewire\Admin\PortalBerita\CreateBerita::class)->name('createBerita');

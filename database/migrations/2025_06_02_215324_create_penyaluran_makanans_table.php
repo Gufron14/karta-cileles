@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->string('alamat');
             $table->integer('jml_kk');
-            $table->json('nama_kk')->nullable();
+            $table->string('nama_kk')->nullable();
+            $table->string('nomor_kk')->nullable();
             $table->date('tanggal');
             $table->enum('status', ['pending', 'disalurkan']);
             $table->timestamps();

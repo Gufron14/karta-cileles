@@ -12,8 +12,7 @@
             <h5 class="card-title mb-0">
                 Data Penyaluran Makanan
             </h5>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahModal"
-                wire:click="resetForm">
+            <button class="btn btn-sm btn-primary" wire:click="create">
                 <i class="fas fa-plus me-2"></i>Tambah Data
             </button>
         </div>
@@ -65,10 +64,9 @@
                         <tr class="text-center">
                             <th>No.</th>
                             <th>Tanggal</th>
-                            {{-- <th>Jumlah Makanan</th> --}}
                             <th>Alamat</th>
                             <th>Jumlah KK</th>
-                            <th>Nama-nama Kepala Keluarga</th>
+                            <th>Data Kepala Keluarga</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -78,17 +76,46 @@
                             <tr class="text-center">
                                 <td>{{ $penyalurans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($penyaluran->tanggal)->format('d/m/Y') }}</td>
-                                {{-- <td>{{ number_format($penyaluran->jumlah) }} porsi</td> --}}
                                 <td class="text-start">{{ $penyaluran->alamat }}</td>
                                 <td>{{ number_format($penyaluran->jml_kk) }} KK</td>
-                                <td>
-                                    @if($penyaluran->nama_kk)
-                                    @foreach(json_decode($penyaluran->nama_kk) as $nama)
-                                        {{ $nama }},
-                                    @endforeach
-                                @else
-                                    <span class="text-muted">Tidak ada data</span>
-                                @endif
+                                <td class="text-start">
+                                    @if($penyaluran->nama_kk && $penyaluran->nomor_kk)
+                                        @php
+                                            // Handle both JSON and old string format for nama_kk
+                                            $nama_kk_decoded = json_decode($penyaluran->nama_kk, true);
+                                            if (is_array($nama_kk_decoded)) {
+                                                $nama_kk_array = $nama_kk_decoded;
+                                            } else {
+                                                // Old format: comma-separated string
+                                                $nama_kk_array = array_map('trim', explode(',', $penyaluran->nama_kk));
+                                            }
+                                            
+                                            // Handle nomor_kk (should be JSON format)
+                                            $nomor_kk_array = json_decode($penyaluran->nomor_kk, true) ?: [];
+                                        @endphp
+                                        @for($i = 0; $i < max(count($nama_kk_array), count($nomor_kk_array)); $i++)
+                                            <div class="mb-1">
+                                                <strong>{{ $nama_kk_array[$i] ?? '-' }}</strong><br>
+                                                <small class="text-muted">KK: {{ $nomor_kk_array[$i] ?? '-' }}</small>
+                                            </div>
+                                        @endfor
+                                    @elseif($penyaluran->nama_kk)
+                                        @php
+                                            // Handle both JSON and old string format for nama_kk
+                                            $nama_kk_decoded = json_decode($penyaluran->nama_kk, true);
+                                            if (is_array($nama_kk_decoded)) {
+                                                $nama_kk_array = $nama_kk_decoded;
+                                            } else {
+                                                // Old format: comma-separated string
+                                                $nama_kk_array = array_map('trim', explode(',', $penyaluran->nama_kk));
+                                            }
+                                        @endphp
+                                        @foreach($nama_kk_array as $nama)
+                                            <div class="mb-1">{{ $nama }}</div>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">Tidak ada data</span>
+                                    @endif
                                 </td>
                                 <td class="text-start">
                                     @if ($penyaluran->status == 'disalurkan')
@@ -138,150 +165,6 @@
             </div>
         </div>
 
-        {{-- Modal Tambah --}}
-        <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="tambahModalLabel" aria-hidden="true"
-            wire:ignore.self>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="tambahModalLabel">Tambah Data Penyaluran Makanan</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form wire:submit.prevent="store">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="jumlah" class="form-label">Jumlah Makanan</label>
-                                <input type="number" class="form-control @error('jumlah') is-invalid @enderror"
-                                    wire:model="jumlah" placeholder="Jumlah makanan dalam porsi" min="1">
-                                @error('jumlah')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="alamat" class="form-label">Alamat Penyaluran</label>
-                                <textarea class="form-control @error('alamat') is-invalid @enderror" wire:model="alamat"
-                                    placeholder="Alamat lengkap penyaluran makanan" rows="3"></textarea>
-                                @error('alamat')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="jml_kk" class="form-label">Jumlah Kepala Keluarga (KK)</label>
-                                <input type="number" class="form-control @error('jml_kk') is-invalid @enderror"
-                                    wire:model="jml_kk" placeholder="Jumlah KK yang menerima" min="1">
-                                @error('jml_kk')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
-                                <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
-                                    placeholder="masukan nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
-                                @error('nama_kk')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="tanggal" class="form-label">Tanggal Penyaluran</label>
-                                <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
-                                    wire:model="tanggal">
-                                @error('tanggal')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
-                                    <option value="pending">Pending</option>
-                                    <option value="disalurkan">Disalurkan</option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        {{-- Modal Edit --}}
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true"
-            wire:ignore.self>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="editModalLabel">Edit Data Penyaluran Makanan</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <form wire:submit.prevent="update">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="edit_jumlah" class="form-label">Jumlah Makanan (porsi)</label>
-                                <input type="number" class="form-control @error('jumlah') is-invalid @enderror"
-                                    wire:model="jumlah" placeholder="Jumlah makanan dalam porsi" min="1">
-                                @error('jumlah')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_alamat" class="form-label">Alamat Penyaluran</label>
-                                <textarea class="form-control @error('alamat') is-invalid @enderror" wire:model="alamat"
-                                    placeholder="Alamat lengkap penyaluran makanan" rows="3"></textarea>
-                                @error('alamat')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_jml_kk" class="form-label">Jumlah Kepala Keluarga (KK)</label>
-                                <input type="number" class="form-control @error('jml_kk') is-invalid @enderror"
-                                    wire:model="jml_kk" placeholder="Jumlah KK yang menerima" min="1">
-                                @error('jml_kk')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_nama_kk" class="form-label">Nama-nama Kepala Keluarga</label>
-                                <textarea class="form-control @error('nama_kk') is-invalid @enderror" wire:model="nama_kk"
-                                    placeholder="Nama-nama kepala Keluarga (Pisahkan dengan tanda koma)" rows="3"></textarea>
-                                @error('nama_kk')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="edit_tanggal" class="form-label">Tanggal Penyaluran</label>
-                                <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
-                                    wire:model="tanggal">
-                                @error('tanggal')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_status" class="form-label">Status</label>
-                                <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
-                                    <option value="pending">Pending</option>
-                                    <option value="disalurkan">Disalurkan</option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         {{-- Modal Detail --}}
         <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel"
             aria-hidden="true" wire:ignore.self>
@@ -317,19 +200,48 @@
                                 </div>
                             </div>
                             <hr>
-<div class="row">
-    <div class="col-5"><strong>Nama-nama KK:</strong></div>
-    <div class="col-7">
-        @if($detailData->nama_kk)
-            @foreach(json_decode($detailData->nama_kk) as $nama)
-                <span class="badge bg-info me-1 mb-1">{{ $nama }}</span>
-            @endforeach
-        @else
-            <span class="text-muted">Tidak ada data</span>
-        @endif
-    </div>
-</div>
-
+                            <div class="row">
+                                <div class="col-5"><strong>Data KK:</strong></div>
+                                <div class="col-7">
+                                    @if($detailData->nama_kk && $detailData->nomor_kk)
+                                        @php
+                                            // Handle both JSON and old string format for nama_kk
+                                            $nama_kk_decoded = json_decode($detailData->nama_kk, true);
+                                            if (is_array($nama_kk_decoded)) {
+                                                $nama_kk_array = $nama_kk_decoded;
+                                            } else {
+                                                // Old format: comma-separated string
+                                                $nama_kk_array = array_map('trim', explode(',', $detailData->nama_kk));
+                                            }
+                                            
+                                            // Handle nomor_kk (should be JSON format)
+                                            $nomor_kk_array = json_decode($detailData->nomor_kk, true) ?: [];
+                                        @endphp
+                                        @for($i = 0; $i < max(count($nama_kk_array), count($nomor_kk_array)); $i++)
+                                            <div class="mb-2">
+                                                <span class="badge bg-info me-1">{{ $nama_kk_array[$i] ?? '-' }}</span>
+                                                <br><small class="text-muted">KK: {{ $nomor_kk_array[$i] ?? '-' }}</small>
+                                            </div>
+                                        @endfor
+                                    @elseif($detailData->nama_kk)
+                                        @php
+                                            // Handle both JSON and old string format for nama_kk
+                                            $nama_kk_decoded = json_decode($detailData->nama_kk, true);
+                                            if (is_array($nama_kk_decoded)) {
+                                                $nama_kk_array = $nama_kk_decoded;
+                                            } else {
+                                                // Old format: comma-separated string
+                                                $nama_kk_array = array_map('trim', explode(',', $detailData->nama_kk));
+                                            }
+                                        @endphp
+                                        @foreach($nama_kk_array as $nama)
+                                            <span class="badge bg-info me-1 mb-1">{{ $nama }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">Tidak ada data</span>
+                                    @endif
+                                </div>
+                            </div>
                             <hr>
                             <div class="row">
                                 <div class="col-5"><strong>Tanggal Penyaluran:</strong></div>

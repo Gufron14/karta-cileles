@@ -15,55 +15,15 @@ class PenyaluranMakanan extends Component
 {
     use WithPagination;
 
-    // Form properties
-    public $jumlah = 0;
-    public $alamat = '';
-    public $jml_kk = 0;
-    public $nama_kk = '';
-
-    public $tanggal;
-    public $status = 'pending';
-
     // Filter properties
     public $statusFilter = '';
     public $bulanFilter = '';
     public $tahunFilter = '';
 
     // Other properties
-    public $editId = null;
     public $detailData = null;
 
     protected $paginationTheme = 'bootstrap';
-
-
-    protected $rules = [
-        'jumlah' => 'required|integer|min:1',
-        'alamat' => 'required|string|max:255',
-        'jml_kk' => 'required|integer|min:1',
-        'nama_kk' => 'required|string',
-        'tanggal' => 'required|date',
-        'status' => 'required|in:pending,disalurkan',
-    ];
-
-    protected $messages = [
-        'jumlah.required' => 'Jumlah makanan harus diisi',
-        'jumlah.integer' => 'Jumlah makanan harus berupa angka',
-        'jumlah.min' => 'Jumlah makanan minimal 1',
-        'alamat.required' => 'Alamat harus diisi',
-        'alamat.max' => 'Alamat maksimal 255 karakter',
-        'jml_kk.required' => 'Jumlah KK harus diisi',
-        'jml_kk.integer' => 'Jumlah KK harus berupa angka',
-        'jml_kk.min' => 'Jumlah KK minimal 1',
-        'tanggal.required' => 'Tanggal harus diisi',
-        'tanggal.date' => 'Format tanggal tidak valid',
-        'status.required' => 'Status harus dipilih',
-        'status.in' => 'Status harus pending atau disalurkan',
-    ];
-
-    public function mount()
-    {
-        $this->tanggal = date('Y-m-d');
-    }
 
     public function render()
     {
@@ -89,68 +49,20 @@ class PenyaluranMakanan extends Component
         ]);
     }
 
-    public function resetForm()
-    {
-        $this->reset(['jumlah', 'alamat', 'jml_kk', 'nama_kk', 'status', 'editId']);
-        $this->tanggal = date('Y-m-d');
-        $this->resetErrorBag();
-    }
-
     public function resetFilters()
     {
         $this->reset(['statusFilter', 'bulanFilter', 'tahunFilter']);
         $this->resetPage();
     }
 
-    public function store()
+    public function create()
     {
-        $this->validate();
-
-        PenyaluranMakananModel::create([
-            'jumlah' => $this->jumlah,
-            'alamat' => $this->alamat,
-            'jml_kk' => $this->jml_kk,
-            'nama_kk' => $this->nama_kk ? json_encode(array_map('trim', explode(',', $this->nama_kk))) : null,
-            'tanggal' => $this->tanggal,
-            'status' => $this->status,
-        ]);
-
-        $this->resetForm();
-        $this->dispatch('close-modal', 'tambahModal');
-        session()->flash('success', 'Data penyaluran makanan berhasil ditambahkan!');
+        return redirect()->route('admin.penyaluran-makanan.create');
     }
 
     public function edit($id)
     {
-        $penyaluran = PenyaluranMakananModel::findOrFail($id);
-        
-        $this->editId = $id;
-        $this->jumlah = $penyaluran->jumlah;
-        $this->alamat = $penyaluran->alamat;
-        $this->jml_kk = $penyaluran->jml_kk;
-        $this->nama_kk = $penyaluran->nama_kk ? implode(', ', json_decode($penyaluran->nama_kk)) : '';
-        $this->tanggal = $penyaluran->tanggal;
-        $this->status = $penyaluran->status;
-
-        $this->dispatch('open-modal', 'editModal');
-    }
-
-    public function update()
-    {
-        $this->validate();
-
-        $penyaluran = PenyaluranMakananModel::findOrFail($this->editId);
-        $penyaluran->update([
-            'jumlah' => $this->jumlah,
-            'alamat' => $this->alamat,
-            'jml_kk' => $this->jml_kk,
-            'tanggal' => $this->tanggal,
-            'status' => $this->status,
-        ]);
-
-        $this->resetForm();
-        $this->dispatch('close-modal', 'editModal');
-        session()->flash('success', 'Data penyaluran makanan berhasil diperbarui!');
+        return redirect()->route('admin.penyaluran-makanan.edit', $id);
     }
 
     public function detail($id)
