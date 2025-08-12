@@ -64,7 +64,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="text" class="form-control @error('kk_data.'.$index.'.nomor_kk') is-invalid @enderror"
+                                    <input type="number" class="form-control @error('kk_data.'.$index.'.nomor_kk') is-invalid @enderror"
                                         wire:model="kk_data.{{ $index }}.nomor_kk" 
                                         placeholder="Nomor KK">
                                     @error('kk_data.'.$index.'.nomor_kk')
